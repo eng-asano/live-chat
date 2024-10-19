@@ -1,5 +1,5 @@
 import { MdFace, MdFace3, MdFace4, MdFace6 } from 'react-icons/md'
-import { Avatar, Card } from '@/app/components'
+import { Avatar, Card } from '@/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 

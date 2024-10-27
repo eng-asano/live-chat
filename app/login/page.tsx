@@ -1,12 +1,22 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { UserIdInput, PasswordInput } from './components'
+import { parseCookies } from 'nookies'
+import { UserIdInput, PasswordInput } from '@/app/_components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 import { neumorphismDump } from '@/styled-system/recipes'
+
+// Amplify.configure({
+//   aws_project_region: process.env.NEXT_PUBLIC_AWS_PROJECT_REGION,
+//   aws_cognito_identity_pool_id: process.env.NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID,
+//   aws_cognito_region: process.env.NEXT_PUBLIC_AWS_COGNITO_REGION,
+//   aws_user_pools_id: process.env.NEXT_PUBLIC_AWS_USER_POOLS_ID,
+//   aws_user_pools_web_client_id: process.env.NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID,
+//   oauth: {},
+// })
 
 export default function Login() {
   const [userId, setUserId] = useState('')
@@ -14,8 +24,23 @@ export default function Login() {
 
   const router = useRouter()
 
-  const goToRoomsPage = useCallback(() => {
-    router.push('/rooms')
+  const goToRoomsPage = useCallback(async () => {
+    try {
+      // await Auth.signIn(userId, password)
+      // await axios.post('/api/auth', {
+      //   rootToken: user.signInUserSession.idToken.jwtToken,
+      //   accessToken: user.signInUserSession.accessToken.jwtToken,
+      // })
+      // router.push('/rooms')
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
+
+  useEffect(() => {
+    const cookies = parseCookies()
+    const idToken = cookies['id_token']
+    if (idToken) router.push('/rooms')
   }, [router])
 
   const disabled = !(userId && password)

@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }: Readonly<Props>) {
   const idToken = cookieStore.get('idToken')?.value
   const accessToken = cookieStore.get('accessToken')?.value
 
-  if (!idToken || !accessToken) redirect('/login')
+  if (idToken && accessToken) redirect('/rooms')
 
   return children
 }

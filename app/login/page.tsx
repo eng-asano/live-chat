@@ -1,74 +1,38 @@
-'use client'
-
-import { useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { parseCookies } from 'nookies'
+import { redirect } from 'next/navigation'
+import { signInWithCredentials } from '@/app/_actions/auth'
 import { UserIdInput, PasswordInput } from '@/app/_components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 import { neumorphismDump } from '@/styled-system/recipes'
 
-// Amplify.configure({
-//   aws_project_region: process.env.NEXT_PUBLIC_AWS_PROJECT_REGION,
-//   aws_cognito_identity_pool_id: process.env.NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID,
-//   aws_cognito_region: process.env.NEXT_PUBLIC_AWS_COGNITO_REGION,
-//   aws_user_pools_id: process.env.NEXT_PUBLIC_AWS_USER_POOLS_ID,
-//   aws_user_pools_web_client_id: process.env.NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID,
-//   oauth: {},
-// })
-
 export default function Login() {
-  const [userId, setUserId] = useState('')
-  const [password, setPassword] = useState('')
-
-  const router = useRouter()
-
-  const goToRoomsPage = useCallback(async () => {
-    try {
-      // await Auth.signIn(userId, password)
-      // await axios.post('/api/auth', {
-      //   rootToken: user.signInUserSession.idToken.jwtToken,
-      //   accessToken: user.signInUserSession.accessToken.jwtToken,
-      // })
-      // router.push('/rooms')
-    } catch (e) {
-      console.log(e)
-    }
-  }, [])
-
-  useEffect(() => {
-    const cookies = parseCookies()
-    const idToken = cookies['id_token']
-    if (idToken) router.push('/rooms')
-  }, [router])
-
-  const disabled = !(userId && password)
+  const signIn = async (formData: FormData) => {
+    'use server'
+    const { redirectUrl } = await signInWithCredentials(formData)
+    if (redirectUrl) redirect(redirectUrl)
+  }
 
   return (
-    <div className={styles.root}>
-      <section className={styles.container}>
-        <div className={styles.heading}>
-          <Image src="/live-chat.png" className={styles.icon} width={40} height={40} alt="Live Chat Icon" />
-          <h1 className={styles.title}>Live&thinsp;Chat</h1>
-        </div>
-        <UserIdInput value={userId} onChange={setUserId} />
-        <PasswordInput value={password} onChange={setPassword} />
-        <button
-          className={`${neumorphismDump({ type: 'button' })} ${styles.signIn}`}
-          disabled={disabled}
-          onClick={goToRoomsPage}
-        >
+    <section className={styles.root}>
+      <div className={styles.heading}>
+        <Image src="/live-chat.png" className={styles.icon} width={40} height={40} alt="Live Chat Icon" />
+        <h1 className={styles.title}>Live&thinsp;Chat</h1>
+      </div>
+      <form className={styles.form} action={signIn}>
+        <UserIdInput name="username" />
+        <PasswordInput name="password" />
+        <button type="submit" className={`${neumorphismDump({ type: 'button' })} ${styles.signIn}`}>
           Sign in
         </button>
-      </section>
+      </form>
       <div className={styles.other}>
         <div className={styles.or}>or</div>
         <div className={`${neumorphismDump({ type: 'button' })} ${styles.google}`}>
           <Image src="/google-icon.png" width={24} height={24} alt="Sign in with Google" />
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 
@@ -83,14 +47,14 @@ const styles = {
     margin: '0 auto',
     padding: '0 24px',
   }),
-  container: flex({
-    direction: 'column',
-    rowGap: '40px',
-  }),
   heading: flex({
     justify: 'center',
     align: 'center',
     columnGap: '20px',
+  }),
+  form: flex({
+    direction: 'column',
+    rowGap: '40px',
   }),
   icon: css({
     width: '40px',

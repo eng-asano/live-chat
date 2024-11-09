@@ -1,10 +1,14 @@
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
+import { Auth } from '@aws-amplify/auth'
+import { authConfig } from '@/app/_utils/auth'
 import { signInWithCredentials } from '@/app/_actions/auth'
-import { UserIdInput, PasswordInput } from '@/app/_components'
+import { UserIdInput, PasswordInput, SocialLogin } from '@/app/_components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 import { neumorphismDump } from '@/styled-system/recipes'
+
+Auth.configure(authConfig)
 
 export default function Login() {
   const signIn = async (formData: FormData) => {
@@ -16,7 +20,7 @@ export default function Login() {
   return (
     <section className={styles.root}>
       <div className={styles.heading}>
-        <Image src="/live-chat.png" className={styles.icon} width={40} height={40} alt="Live Chat Icon" />
+        <Image src="/images/live-chat.png" className={styles.icon} width={40} height={40} alt="Live Chat Icon" />
         <h1 className={styles.title}>Live&thinsp;Chat</h1>
       </div>
       <form className={styles.form} action={signIn}>
@@ -28,9 +32,7 @@ export default function Login() {
       </form>
       <div className={styles.other}>
         <div className={styles.or}>or</div>
-        <div className={`${neumorphismDump({ type: 'button' })} ${styles.google}`}>
-          <Image src="/google-icon.png" width={24} height={24} alt="Sign in with Google" />
-        </div>
+        <SocialLogin />
       </div>
     </section>
   )
@@ -112,12 +114,5 @@ const styles = {
       marginLeft: '8px',
       backgroundColor: 'gray.400',
     },
-  }),
-  google: flex({
-    justify: 'center',
-    align: 'center',
-    width: '48px',
-    height: '48px',
-    borderRadius: '50%',
   }),
 }

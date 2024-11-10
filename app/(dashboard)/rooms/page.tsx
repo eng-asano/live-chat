@@ -1,9 +1,14 @@
+import { redirect } from 'next/navigation'
 import { MdFace, MdFace3, MdFace4, MdFace6 } from 'react-icons/md'
+import { verifyIdToken } from '@/app/_actions/auth'
 import { Avatar, Card } from '@/app/_components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
-export default function Rooms() {
+export default async function Rooms() {
+  const res = await verifyIdToken()
+  if (res.status === 'error') redirect('/login')
+
   return (
     <div className={styles.root}>
       <section className={styles.card}>

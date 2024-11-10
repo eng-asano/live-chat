@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { Auth } from '@aws-amplify/auth'
 import { authConfig } from '@/app/_utils/auth'
-import { signInWithCredentials } from '@/app/_actions/auth'
+import { signInWithCredentials, verifyIdToken } from '@/app/_actions/auth'
 import { UserIdInput, PasswordInput, SocialLogin } from '@/app/_components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
@@ -10,7 +10,10 @@ import { neumorphismDump } from '@/styled-system/recipes'
 
 Auth.configure(authConfig)
 
-export default function Login() {
+export default async function Login() {
+  const res = await verifyIdToken()
+  if (res.status === 'success') redirect('/rooms')
+
   const signIn = async (formData: FormData) => {
     'use server'
     const { redirectUrl } = await signInWithCredentials(formData)

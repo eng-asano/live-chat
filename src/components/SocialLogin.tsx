@@ -3,7 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { Auth, CognitoHostedUIIdentityProvider } from '@aws-amplify/auth'
-import { authConfig } from '@/app/_utils/auth'
+import { authConfig } from '@/src/utils/auth'
 import { neumorphismDump } from '@/styled-system/recipes'
 import { flex } from '@/styled-system/patterns'
 

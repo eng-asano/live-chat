@@ -3,7 +3,7 @@
 import { Auth } from '@aws-amplify/auth'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet } from 'jose'
-import { cookieOption } from '@/app/_utils/auth'
+import { cookieOption } from '@/src/utils/auth'
 
 /** Cognitoによる通常サインイン */
 export async function signInWithCredentials(formData: FormData) {

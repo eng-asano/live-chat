@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { MdFace, MdFace3, MdFace4, MdFace6 } from 'react-icons/md'
-import { verifyIdToken } from '@/app/_actions/auth'
-import { Avatar, Card } from '@/app/_components'
+import { verifyIdToken } from '@/src/actions/auth'
+import { Avatar, Card } from '@/src/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 

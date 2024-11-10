@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { cookieOption } from '@/app/_utils/auth'
+import { cookieOption } from '@/src/utils/auth'
 
 interface RequestData {
   idToken: string

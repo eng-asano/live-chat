@@ -9,12 +9,9 @@ export async function middleware(request: NextRequest) {
 
   const currentPath = request.nextUrl.pathname
 
-  if (!hasToken && currentPath !== '/login') {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  if (hasToken && (currentPath === '/' || currentPath === '/login')) {
-    return NextResponse.redirect(new URL('/rooms', request.url))
+  if (currentPath === '/') {
+    const url = hasToken ? '/rooms' : '/login'
+    return NextResponse.redirect(new URL(url, request.url))
   }
 
   return NextResponse.next()

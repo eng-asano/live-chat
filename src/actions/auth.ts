@@ -28,6 +28,21 @@ export async function signInWithCredentials(formData: FormData) {
   }
 }
 
+export async function signOutWithCredentials() {
+  try {
+    await Auth.signOut()
+
+    const cookieStore = cookies()
+    cookieStore.delete('idToken')
+    cookieStore.delete('accessToken')
+
+    return { redirectUrl: '/login' }
+  } catch (e) {
+    console.error(e)
+    return { error: 'Sign out error' }
+  }
+}
+
 /** IDトークン（認証）の検証 */
 export async function verifyIdToken() {
   const cookieStore = cookies()

@@ -20,6 +20,8 @@
     // キーの空白
     "key-spacing": "warn",
     // キーワードの前後には適切なスペースを入れる
-    "keyword-spacing": "warn"
+    "keyword-spacing": "warn",
+    // 引数'_'は許容
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
   }
 }

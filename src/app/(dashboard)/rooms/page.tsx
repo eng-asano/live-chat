@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { MdFace, MdFace3, MdFace4, MdFace6 } from 'react-icons/md'
-import { verifyIdToken } from '@/src/actions/auth'
+import { signOutWithCredentials, verifyIdToken } from '@/src/actions/auth'
 import { Avatar, Card } from '@/src/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
@@ -9,8 +9,17 @@ export default async function Rooms() {
   const res = await verifyIdToken()
   if (res.status === 'error') redirect('/login')
 
+  const signOut = async (_: FormData) => {
+    'use server'
+    const { redirectUrl } = await signOutWithCredentials()
+    if (redirectUrl) redirect(redirectUrl)
+  }
+
   return (
     <div className={styles.root}>
+      <form action={signOut}>
+        <button type="submit">Sign out</button>
+      </form>
       <section className={styles.card}>
         <Card>
           <h2 className={styles.title}>Room 1</h2>

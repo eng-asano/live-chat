@@ -7,11 +7,18 @@ export async function middleware(request: NextRequest) {
   const accessToken = cookieStore.get('accessToken')?.value
   const hasToken = !!idToken && !!accessToken
 
-  const currentPath = request.nextUrl.pathname
+  const url = request.nextUrl
 
-  if (currentPath === '/') {
+  if (url.pathname === '/') {
     const url = hasToken ? '/rooms' : '/login'
     return NextResponse.redirect(new URL(url, request.url))
+  }
+
+  // SocialSignIn経由で付与された認可コード、CSRF防止コードを削除
+  if (url.searchParams.has('code') || url.searchParams.has('state')) {
+    url.searchParams.delete('code')
+    url.searchParams.delete('state')
+    return NextResponse.redirect(url)
   }
 
   return NextResponse.next()

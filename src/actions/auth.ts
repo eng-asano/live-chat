@@ -81,7 +81,7 @@ async function verifyToken(token?: string) {
     return { status: 'success', payload } as const
   } catch (e) {
     if (e instanceof Error) {
-      console.error('Token verification failed:', e.message)
+      console.log('Token verification failed:', e.message)
     }
     return { status: 'error' } as const
   }

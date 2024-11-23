@@ -1,4 +1,5 @@
 import { Fira_Code } from 'next/font/google'
+import { css } from '@/styled-system/css'
 import './globals.css'
 
 const FiraCode = Fira_Code({
@@ -15,7 +16,15 @@ interface Props {
 export default function RootLayout({ children }: Readonly<Props>) {
   return (
     <html lang="en" className={FiraCode.variable}>
-      <body>{children}</body>
+      <body>
+        <div className={styles.root}>{children}</div>
+      </body>
     </html>
   )
+}
+
+const styles = {
+  root: css({
+    h: '100dvh',
+  }),
 }

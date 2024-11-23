@@ -34,7 +34,7 @@ export default function RoomsLayout({ children }: Readonly<Props>) {
           </button>
         </form>
       </div>
-      <div className={styles.contents}>{children}</div>
+      {children}
     </div>
   )
 }
@@ -49,12 +49,6 @@ const styles = {
     padding: '32px 32px 0',
     color: '#fff',
     background: 'background.main',
-  }),
-  contents: css({
-    width: '100%',
-    height: '100dvh',
-    padding: '32px',
-    overflowY: 'auto',
   }),
   header: flex({
     justifyContent: 'center',

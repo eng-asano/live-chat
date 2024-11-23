@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import { Auth, CognitoHostedUIIdentityProvider } from '@aws-amplify/auth'
 import { authConfig } from '@/src/utils/auth'
-import { neumorphismDump } from '@/styled-system/recipes'
+import { loginUIBase } from '@/styled-system/recipes'
 import { flex } from '@/styled-system/patterns'
 
 Auth.configure(authConfig)
@@ -29,7 +29,7 @@ export const SocialLogin = React.memo(() => {
 
   return (
     <form action={signInWithGoogle}>
-      <button type="submit" className={`${neumorphismDump({ type: 'button' })} ${styles.google}`}>
+      <button type="submit" className={`${loginUIBase()} ${styles.google}`}>
         <Image src="/images/google-icon.png" width={24} height={24} alt="Sign in with Google" />
       </button>
     </form>

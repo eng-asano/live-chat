@@ -1,43 +1,29 @@
 import React from 'react'
 import { MdPerson, MdLock } from 'react-icons/md'
-import { neumorphismDent } from '@/styled-system/recipes'
+import { loginUIBase } from '@/styled-system/recipes'
 import { css } from '@/styled-system/css'
 
 interface Props {
   name: string
 }
 
-export const UserIdInput = React.memo(({ name }: Props) => {
+export const UserIdInput = ({ name }: Props) => {
   return (
     <div className={styles.root}>
       <MdPerson className={styles.icon} size={24} />
-      <input
-        type="text"
-        name={name}
-        className={`${neumorphismDent({ type: 'input' })} ${styles.input}`}
-        placeholder="User ID"
-      />
+      <input type="text" name={name} className={`${loginUIBase()} ${styles.input}`} placeholder="id" />
     </div>
   )
-})
+}
 
-UserIdInput.displayName = 'UserIdInput'
-
-export const PasswordInput = React.memo(({ name }: Props) => {
+export const PasswordInput = ({ name }: Props) => {
   return (
     <div className={styles.root}>
       <MdLock className={styles.icon} size={24} />
-      <input
-        type="password"
-        name={name}
-        className={`${neumorphismDent({ type: 'input' })} ${styles.input}`}
-        placeholder="Password"
-      />
+      <input type="password" name={name} className={`${loginUIBase()} ${styles.input}`} placeholder="password" />
     </div>
   )
-})
-
-PasswordInput.displayName = 'PasswordInput'
+}
 
 const styles = {
   root: css({

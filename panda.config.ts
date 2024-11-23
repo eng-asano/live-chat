@@ -1,16 +1,22 @@
 import { defineConfig, defineGlobalStyles } from '@pandacss/dev'
-import { neumorphismDentRecipe, neumorphismDumpRecipe } from './panda.recipe'
+import { loginUIBaseRecipe, separatorRecipe, messageTextRecipe } from './panda.recipe'
 
 const globalCss = defineGlobalStyles({
   'html, body': {
-    fontSize: '16px',
+    fontSize: '12px',
     letterSpacing: '0.1rem',
-    color: 'gray.700',
-    lineHeight: '1.5',
-    background: 'background',
+    color: 'font.main',
+    lineHeight: '1rem',
+    wordWrap: 'break-word',
+    overflowWrap: 'break-word',
+    wordBreak: 'break-all',
+    overflowY: 'hidden',
   },
   html: {
     '--global-font-body': 'Roboto, sans-serif',
+  },
+  button: {
+    cursor: 'pointer',
   },
 })
 
@@ -42,16 +48,33 @@ export default defineConfig({
         colors: {
           primary: {
             main: { value: '#0891b2' },
+            dark: { value: '#056178' },
           },
-          background: { value: '#f5f5f5' },
+          accent: {
+            main: { value: '#ffef44' },
+          },
+          message: {
+            user: { value: '#0891b226' },
+            member: { value: '#0891b208' },
+          },
+          font: {
+            light: { value: '#999999' },
+            main: { value: '#545454' },
+            dark: { value: '#080808' },
+          },
+          background: {
+            light: { value: '#f0f0f0' },
+            main: { value: 'linear-gradient(to top, #0891b2, #0896bd, #0bc2da)' },
+          },
         },
         fonts: {
           fira: { value: 'var(--font-fira-code)' },
         },
       },
       recipes: {
-        neumorphismDent: neumorphismDentRecipe,
-        neumorphismDump: neumorphismDumpRecipe,
+        loginUIBase: loginUIBaseRecipe,
+        separator: separatorRecipe,
+        messageText: messageTextRecipe,
       },
     },
   },

@@ -1,5 +1,6 @@
 export * from './Input'
 export * from './Members'
 export * from './Messages'
+export * from './MessageInput'
 export * from './Profile'
 export * from './SocialLogin'

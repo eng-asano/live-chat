@@ -90,5 +90,9 @@ const styles = {
     _hover: {
       bgColor: 'primary.dark',
     },
+    _focus: {
+      bgColor: 'primary.dark',
+      outline: 'none',
+    },
   }),
 }

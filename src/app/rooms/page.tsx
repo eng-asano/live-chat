@@ -24,6 +24,7 @@ export default async function Rooms() {
 
 const styles = {
   root: flex({
+    position: 'relative',
     direction: 'column',
     justify: 'space-between',
     w: '100%',
@@ -31,8 +32,9 @@ const styles = {
   }),
   scroll: css({
     width: '100%',
-    height: 'calc(100dvh - 96px)',
+    height: '100dvh',
     padding: '32px',
+    pb: '120px',
     overflowY: 'auto',
   }),
   messages: css({
@@ -41,10 +43,12 @@ const styles = {
     m: '0 auto',
   }),
   input: css({
-    position: 'sticky',
+    position: 'absolute',
+    inset: 'auto 0 0 0',
     w: 'calc(100% - 64px)',
     maxW: '1280px',
     m: '0 auto',
-    pb: '24px',
+    p: '24px',
+    bgColor: '#fff',
   }),
 }

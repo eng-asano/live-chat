@@ -1,29 +1,63 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { MdPerson, MdLock } from 'react-icons/md'
 import { loginUIBase } from '@/styled-system/recipes'
 import { css } from '@/styled-system/css'
 
 interface Props {
   name: string
+  value: string
+  onChange: (v: string) => void
 }
 
-export const UserIdInput = ({ name }: Props) => {
+export const UserIdInput = React.memo(({ name, value, onChange }: Props) => {
+  const change = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.value)
+    },
+    [onChange]
+  )
+
   return (
     <div className={styles.root}>
       <MdPerson className={styles.icon} size={24} />
-      <input type="text" name={name} className={`${loginUIBase()} ${styles.input}`} placeholder="id" />
+      <input
+        type="text"
+        name={name}
+        value={value}
+        className={`${loginUIBase()} ${styles.input}`}
+        placeholder="id"
+        onChange={change}
+      />
     </div>
   )
-}
+})
 
-export const PasswordInput = ({ name }: Props) => {
+UserIdInput.displayName = 'UserIdInput'
+
+export const PasswordInput = React.memo(({ name, value, onChange }: Props) => {
+  const change = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.value)
+    },
+    [onChange]
+  )
+
   return (
     <div className={styles.root}>
       <MdLock className={styles.icon} size={24} />
-      <input type="password" name={name} className={`${loginUIBase()} ${styles.input}`} placeholder="password" />
+      <input
+        type="password"
+        name={name}
+        value={value}
+        className={`${loginUIBase()} ${styles.input}`}
+        placeholder="password"
+        onChange={change}
+      />
     </div>
   )
-}
+})
+
+PasswordInput.displayName = 'PasswordInput'
 
 const styles = {
   root: css({

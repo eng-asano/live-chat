@@ -1,12 +1,15 @@
 'use server'
 
 import { Auth } from '@aws-amplify/auth'
+import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet } from 'jose'
-import { cookieOption } from '@/src/utils/auth'
+import { authConfig, cookieOption } from '@/src/utils/auth'
+
+Auth.configure(authConfig)
 
 /** Cognitoによる通常サインイン */
-export async function signInWithCredentials(formData: FormData) {
+export async function signIn(_: { error: string } | undefined, formData: FormData) {
   const userName = formData.get('username') as string
   const passWord = formData.get('password') as string
 
@@ -21,14 +24,14 @@ export async function signInWithCredentials(formData: FormData) {
     cookieStore.set('idToken', idToken, cookieOption)
     cookieStore.set('accessToken', accessToken, cookieOption)
 
-    return { redirectUrl: '/rooms' }
+    redirect('/rooms')
   } catch (e) {
-    console.error(e)
-    return { error: 'Authentication failed' }
+    return { error: (e as Error).message }
   }
 }
 
-export async function signOutWithCredentials() {
+/** Cognitoによる通常サインアウト */
+export async function signOut(_: FormData) {
   try {
     await Auth.signOut()
 
@@ -36,10 +39,9 @@ export async function signOutWithCredentials() {
     cookieStore.delete('idToken')
     cookieStore.delete('accessToken')
 
-    return { redirectUrl: '/login' }
+    redirect('/login')
   } catch (e) {
-    console.error(e)
-    return { error: 'Sign out error' }
+    console.log(e)
   }
 }
 
@@ -79,10 +81,7 @@ async function verifyToken(token?: string) {
 
     // ペイロードを返す
     return { status: 'success', payload } as const
-  } catch (e) {
-    if (e instanceof Error) {
-      console.log('Token verification failed:', e.message)
-    }
+  } catch {
     return { status: 'error' } as const
   }
 }

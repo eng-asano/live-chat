@@ -100,7 +100,8 @@ const styles = {
       borderLeftWidth: '4px',
       borderColor: 'error.main',
       borderRadius: '4px',
-      boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.3)',
+      boxShadow: '0px 10px 20px',
+      boxShadowColor: 'boxShadow.main',
       '&[data-state="open"]': {
         animation: 'toastIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
       },

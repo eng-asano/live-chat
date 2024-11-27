@@ -15,8 +15,10 @@ export default async function Rooms() {
           <Messages />
         </div>
       </div>
-      <div className={styles.input}>
-        <MessageInput />
+      <div className={styles.shadow}>
+        <div className={styles.input}>
+          <MessageInput />
+        </div>
       </div>
     </div>
   )
@@ -31,24 +33,27 @@ const styles = {
     m: '0 auto',
   }),
   scroll: css({
-    width: '100%',
-    height: '100dvh',
-    padding: '32px',
-    pb: '120px',
-    overflowY: 'auto',
+    w: '100%',
+    h: 'calc(100dvh - 90px)',
+    p: '32px',
+    overflowY: 'scroll',
   }),
   messages: css({
     position: 'relative',
     maxW: '1280px',
     m: '0 auto',
   }),
-  input: css({
+  shadow: css({
     position: 'absolute',
     inset: 'auto 0 0 0',
+    bgColor: '#fff',
+    boxShadow: '6px 10px 16px',
+    boxShadowColor: 'boxShadow.main',
+  }),
+  input: css({
     w: 'calc(100% - 64px)',
     maxW: '1280px',
     m: '0 auto',
-    p: '24px',
-    bgColor: '#fff',
+    p: '24px 0',
   }),
 }

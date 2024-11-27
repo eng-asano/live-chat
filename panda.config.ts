@@ -69,6 +69,9 @@ export default defineConfig({
             light: { value: '#f0f0f0' },
             main: { value: 'linear-gradient(to top, #0891b2, #0896bd, #0bc2da)' },
           },
+          boxShadow: {
+            main: { value: 'rgba(0, 0, 0, 0.3)' },
+          },
         },
         fonts: {
           fira: { value: 'var(--font-fira-code)' },

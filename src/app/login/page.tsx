@@ -41,7 +41,8 @@ const styles = {
     p: '32px',
     bg: '#fff',
     borderRadius: '12px',
-    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0px 10px 20px',
+    boxShadowColor: 'boxShadow.main',
   }),
   heading: flex({
     justify: 'center',

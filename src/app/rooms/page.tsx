@@ -6,7 +6,7 @@ import { flex } from '@/styled-system/patterns'
 
 export default async function Rooms() {
   const res = await verifyIdToken()
-  if (res.status === 'error') redirect('/login')
+  if (res.status === 'error') redirect('/sign-in')
 
   return (
     <div className={styles.root}>

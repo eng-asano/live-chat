@@ -39,7 +39,7 @@ export async function signOut(_: FormData) {
     cookieStore.delete('idToken')
     cookieStore.delete('accessToken')
 
-    redirect('/login')
+    redirect('/sign-in')
   } catch (e) {
     console.log(e)
   }

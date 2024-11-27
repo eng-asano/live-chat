@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl
 
   if (url.pathname === '/') {
-    const url = hasToken ? '/rooms' : '/login'
+    const url = hasToken ? '/rooms' : '/sign-in'
     return NextResponse.redirect(new URL(url, request.url))
   }
 

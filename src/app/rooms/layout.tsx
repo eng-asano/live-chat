@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation'
 import { MdLogout } from 'react-icons/md'
-import { signOutWithCredentials } from '@/src/actions/auth'
+import { signOut } from '@/src/actions/auth'
 import { Profile, Members } from '@/src/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
@@ -10,12 +9,6 @@ interface Props {
 }
 
 export default function RoomsLayout({ children }: Readonly<Props>) {
-  const signOut = async (_: FormData) => {
-    'use server'
-    const { redirectUrl } = await signOutWithCredentials()
-    if (redirectUrl) redirect(redirectUrl)
-  }
-
   return (
     <div className={styles.root}>
       <div className={styles.side}>

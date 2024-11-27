@@ -9,7 +9,7 @@ import { flex } from '@/styled-system/patterns'
 
 Auth.configure(authConfig)
 
-export const SocialLogin = React.memo(() => {
+export const SocialSignIn = React.memo(() => {
   const signInWithGoogle = async () => {
     try {
       await Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google })
@@ -36,7 +36,7 @@ export const SocialLogin = React.memo(() => {
   )
 })
 
-SocialLogin.displayName = 'SocialLogin'
+SocialSignIn.displayName = 'SocialSignIn'
 
 const styles = {
   google: flex({

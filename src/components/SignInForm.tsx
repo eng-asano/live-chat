@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import * as Toast from '@radix-ui/react-toast'
 import { MdHighlightOff } from 'react-icons/md'
 import { useActionStateCompat } from '@strozw/use-action-state-compat'
-import { UserIdInput, PasswordInput } from '@/src/components'
+import { TeamCodeInput, UserIdInput, PasswordInput } from '@/src/components'
 import { signIn } from '@/src/actions/auth'
 import { useClient } from '@/src/hooks'
 import { css } from '@/styled-system/css'
@@ -17,7 +17,8 @@ const duration = 3000
 export const SignInForm = () => {
   const [res, formAction, isPending] = useActionStateCompat(signIn, undefined)
 
-  const [id, setId] = useState('')
+  const [teamCode, setTeamCode] = useState('')
+  const [userId, setUserId] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string>()
 
@@ -32,11 +33,12 @@ export const SignInForm = () => {
     f()
   }, [res])
 
-  const disabled = id === '' || password === '' || isPending || error !== undefined
+  const disabled = teamCode === '' || userId === '' || password === '' || isPending || error !== undefined
 
   return (
     <form className={styles.form} action={formAction}>
-      <UserIdInput name="username" value={id} onChange={setId} />
+      <TeamCodeInput name="teamcode" value={teamCode} onChange={setTeamCode} />
+      <UserIdInput name="username" value={userId} onChange={setUserId} />
       <PasswordInput name="password" value={password} onChange={setPassword} />
       <button type="submit" className={`${loginUIBase()} ${styles.signIn}`} disabled={disabled}>
         Sign In
@@ -59,7 +61,7 @@ export const SignInForm = () => {
 const styles = {
   form: flex({
     direction: 'column',
-    rowGap: '40px',
+    rowGap: '32px',
   }),
   signIn: css({
     w: '100%',

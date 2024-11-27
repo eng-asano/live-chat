@@ -107,9 +107,6 @@ const styles = {
       '&[data-state="closed"]': {
         animation: 'toastOut 0.5s ease-in',
       },
-      // '&[data-state="move"]': {
-      //   transform: 'translateX(40px)',
-      // },
     }),
   },
 }

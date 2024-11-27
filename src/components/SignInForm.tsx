@@ -38,7 +38,7 @@ export const SignInForm = () => {
   return (
     <form className={styles.form} action={formAction}>
       <TeamCodeInput name="teamcode" value={teamCode} onChange={setTeamCode} />
-      <UserIdInput name="username" value={userId} onChange={setUserId} />
+      <UserIdInput name="userid" value={userId} onChange={setUserId} />
       <PasswordInput name="password" value={password} onChange={setPassword} />
       <button type="submit" className={`${loginUIBase()} ${styles.signIn}`} disabled={disabled}>
         Sign In

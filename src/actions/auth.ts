@@ -10,11 +10,11 @@ Auth.configure(authConfig)
 
 /** Cognitoによる通常サインイン */
 export async function signIn(_: { error: string } | undefined, formData: FormData) {
-  const userName = formData.get('username') as string
+  const userId = formData.get('userid') as string
   const passWord = formData.get('password') as string
 
   try {
-    await Auth.signIn(userName, passWord)
+    await Auth.signIn(userId, passWord)
 
     const session = await Auth.currentSession()
     const idToken = session.getIdToken().getJwtToken()

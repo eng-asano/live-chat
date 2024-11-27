@@ -53,6 +53,9 @@ export default defineConfig({
           accent: {
             main: { value: '#ffef44' },
           },
+          error: {
+            main: { value: '#f22911' },
+          },
           message: {
             user: { value: '#0891b226' },
             member: { value: '#0891b208' },
@@ -75,6 +78,16 @@ export default defineConfig({
         loginUIBase: loginUIBaseRecipe,
         separator: separatorRecipe,
         messageText: messageTextRecipe,
+      },
+      keyframes: {
+        toastIn: {
+          from: { opacity: 0, transform: 'translateX(100%)' },
+          to: { opacity: 1, transform: 'translateX(0)' },
+        },
+        toastOut: {
+          from: { opacity: 1, transform: 'translateX(0)' },
+          to: { opacity: 0, transform: 'translateX(100%)' },
+        },
       },
     },
   },

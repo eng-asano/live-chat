@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import * as Toast from '@radix-ui/react-toast'
 import { MdHighlightOff } from 'react-icons/md'
 import { useActionStateCompat } from '@strozw/use-action-state-compat'
-import { TeamCodeInput, UserIdInput, PasswordInput } from '@/src/components'
+import { UserIdInput, PasswordInput, TeamCodeSelect } from '@/src/components'
 import { signIn } from '@/src/actions/auth'
 import { useClient } from '@/src/hooks'
 import { css } from '@/styled-system/css'
@@ -37,7 +37,7 @@ export const SignInForm = () => {
 
   return (
     <form className={styles.form} action={formAction}>
-      <TeamCodeInput name="teamcode" value={teamCode} onChange={setTeamCode} />
+      <TeamCodeSelect name="teamcode" value={teamCode} onChange={setTeamCode} />
       <UserIdInput name="userid" value={userId} onChange={setUserId} />
       <PasswordInput name="password" value={password} onChange={setPassword} />
       <button type="submit" className={`${loginUIBase()} ${styles.signIn}`} disabled={disabled}>

@@ -36,8 +36,15 @@ const styles = {
     direction: 'column',
     justify: 'center',
     rowGap: '40px',
-    w: '480px',
-    m: 'auto',
+    w: {
+      base: '100%',
+      lg: '600px',
+    },
+    h: {
+      base: 'calc(100% - 48px)',
+      lg: 'fit-content',
+    },
+    m: '0 24px',
     p: '32px',
     bg: '#fff',
     borderRadius: '12px',

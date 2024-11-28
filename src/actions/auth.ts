@@ -10,11 +10,18 @@ Auth.configure(authConfig)
 
 /** Cognitoによる通常サインイン */
 export async function signIn(_: { error: string } | undefined, formData: FormData) {
+  const teamCode = formData.get('teamcode') as string
   const userId = formData.get('userid') as string
   const passWord = formData.get('password') as string
 
   try {
     await Auth.signIn(userId, passWord)
+
+    const user = await Auth.currentAuthenticatedUser()
+
+    if (teamCode !== user.attributes['custom:team_code']) {
+      throw new Error('Incorrect team code.')
+    }
 
     const session = await Auth.currentSession()
     const idToken = session.getIdToken().getJwtToken()

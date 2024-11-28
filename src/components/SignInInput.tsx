@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { MdGroup, MdPerson, MdLock } from 'react-icons/md'
+import { MdPerson, MdLock } from 'react-icons/md'
 import { loginUIBase } from '@/styled-system/recipes'
 import { css } from '@/styled-system/css'
 
@@ -8,31 +8,6 @@ interface Props {
   value: string
   onChange: (v: string) => void
 }
-
-export const TeamCodeInput = React.memo(({ name, value, onChange }: Props) => {
-  const change = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(e.target.value)
-    },
-    [onChange]
-  )
-
-  return (
-    <div className={styles.root}>
-      <MdGroup className={styles.icon} size={24} />
-      <input
-        type="text"
-        name={name}
-        value={value}
-        className={`${loginUIBase()} ${styles.input}`}
-        placeholder="Team Code"
-        onChange={change}
-      />
-    </div>
-  )
-})
-
-TeamCodeInput.displayName = 'TeamCodeInput'
 
 export const UserIdInput = React.memo(({ name, value, onChange }: Props) => {
   const change = useCallback(

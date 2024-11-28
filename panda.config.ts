@@ -40,7 +40,7 @@ export default defineConfig({
       breakpoints: {
         sm: '640px',
         md: '900px',
-        lg: '1024px',
+        lg: '1025px',
         xl: '1400px',
         '2xl': '1536px',
       },
@@ -70,7 +70,11 @@ export default defineConfig({
             main: { value: 'linear-gradient(to top, #0891b2, #0896bd, #0bc2da)' },
           },
           boxShadow: {
+            light: { value: 'rgba(200, 200, 200, 0.3)' },
             main: { value: 'rgba(0, 0, 0, 0.3)' },
+          },
+          selected: {
+            main: { value: 'rgba(8, 144, 178, 0.1)' },
           },
         },
         fonts: {

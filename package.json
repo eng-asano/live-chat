@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-amplify/auth": "5.6.15",
+    "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-toast": "1.2.2",
     "@strozw/use-action-state-compat": "^0.1.10",
     "jose": "5.9.6",

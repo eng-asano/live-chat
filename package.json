@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-amplify/auth": "5.6.15",
+    "@aws-sdk/client-cognito-identity-provider": "^3.699.0",
     "@aws-sdk/client-dynamodb": "3.699.0",
     "@aws-sdk/client-s3": "3.701.0",
     "@aws-sdk/lib-dynamodb": "3.699.0",

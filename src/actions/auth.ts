@@ -3,8 +3,9 @@
 import { Auth } from '@aws-amplify/auth'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { jwtVerify, createRemoteJWKSet } from 'jose'
+import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
 import { authConfig, cookieOption } from '@/src/utils/auth'
+import { UserInfo } from '@/src/types/auth'
 
 Auth.configure(authConfig)
 
@@ -45,8 +46,6 @@ export async function signOut(_: FormData) {
     const cookieStore = cookies()
     cookieStore.delete('idToken')
     cookieStore.delete('accessToken')
-
-    redirect('/sign-in')
   } catch (e) {
     console.log(e)
   }
@@ -91,4 +90,11 @@ async function verifyToken(token?: string) {
   } catch {
     return { status: 'error' } as const
   }
+}
+
+/** JWTからユーザー情報を取得 */
+export async function getUserInfo() {
+  const cookieStore = cookies()
+  const value = cookieStore.get('idToken')?.value
+  return value ? (decodeJwt(value) as UserInfo) : undefined
 }

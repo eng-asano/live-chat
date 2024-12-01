@@ -38,7 +38,7 @@ const styles = {
     rowGap: '40px',
     w: {
       base: '100%',
-      lg: '600px',
+      lg: '480px',
     },
     h: {
       base: 'calc(100% - 48px)',

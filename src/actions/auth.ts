@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
 import { authConfig, cookieOption } from '@/src/utils/auth'
-import { UserInfo } from '@/src/types/auth'
+import { UserInfo } from '@/src/types/cognito'
 
 Auth.configure(authConfig)
 

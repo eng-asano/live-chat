@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@aws-amplify/auth": "5.6.15",
+    "@aws-sdk/client-dynamodb": "3.699.0",
     "@aws-sdk/client-s3": "3.701.0",
+    "@aws-sdk/lib-dynamodb": "3.699.0",
     "@radix-ui/react-select": "2.1.2",
     "@radix-ui/react-toast": "1.2.2",
     "@strozw/use-action-state-compat": "0.1.10",
@@ -25,7 +27,6 @@
   },
   "devDependencies": {
     "@pandacss/dev": "0.46.1",
-    "@types/jsonwebtoken": "9.0.7",
     "@types/node": "20.16.10",
     "@types/react": "18.3.11",
     "@types/react-dom": "18.3.0",

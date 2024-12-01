@@ -1,13 +1,18 @@
 'use server'
 
 import { Auth } from '@aws-amplify/auth'
-import { redirect } from 'next/navigation'
+import {
+  CognitoIdentityProviderClient,
+  AdminUpdateUserAttributesCommand,
+} from '@aws-sdk/client-cognito-identity-provider'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
 import { authConfig, cookieOption } from '@/src/utils/auth'
 import { UserInfo } from '@/src/types/cognito'
 
 Auth.configure(authConfig)
+
+const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.NEXT_AWS_REGION })
 
 /** Cognitoによる通常サインイン */
 export async function signIn(_: { error: string } | undefined, formData: FormData) {
@@ -24,6 +29,8 @@ export async function signIn(_: { error: string } | undefined, formData: FormDat
       throw new Error('Incorrect team code.')
     }
 
+    await updateActiveFlag(user.username, true)
+
     const session = await Auth.currentSession()
     const idToken = session.getIdToken().getJwtToken()
     const accessToken = session.getAccessToken().getJwtToken()
@@ -31,8 +38,6 @@ export async function signIn(_: { error: string } | undefined, formData: FormDat
     const cookieStore = cookies()
     cookieStore.set('idToken', idToken, cookieOption)
     cookieStore.set('accessToken', accessToken, cookieOption)
-
-    redirect('/rooms')
   } catch (e) {
     return { error: (e as Error).message }
   }
@@ -41,7 +46,12 @@ export async function signIn(_: { error: string } | undefined, formData: FormDat
 /** Cognitoによる通常サインアウト */
 export async function signOut(_: FormData) {
   try {
-    await Auth.signOut()
+    const user = await getUserInfo()
+
+    if (user) {
+      await updateActiveFlag(user['cognito:username'], false)
+      await Auth.signOut()
+    }
 
     const cookieStore = cookies()
     cookieStore.delete('idToken')
@@ -49,6 +59,16 @@ export async function signOut(_: FormData) {
   } catch (e) {
     console.log(e)
   }
+}
+
+/** SignIn状態のフラグを更新 */
+async function updateActiveFlag(username: string, isActive: boolean) {
+  const command = new AdminUpdateUserAttributesCommand({
+    UserPoolId: authConfig.userPoolId,
+    Username: username,
+    UserAttributes: [{ Name: 'custom:is_active', Value: isActive ? '1' : '0' }],
+  })
+  await cognitoClient.send(command)
 }
 
 /** IDトークン（認証）の検証 */

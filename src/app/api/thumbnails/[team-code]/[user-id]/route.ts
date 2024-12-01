@@ -14,7 +14,7 @@ const s3 = new S3Client({ region: process.env.NEXT_AWS_REGION })
 export async function GET(_: Request, { params }: { params: Params }): Promise<NextResponse<ThumbnailResponse>> {
   const command = new GetObjectCommand({
     Bucket: 'live-chat-user-thumbnail',
-    Key: `${params['team-code']}/${params['user-id']}.webp`,
+    Key: `${params['team-code']}/${params['user-id']}`,
   })
 
   try {

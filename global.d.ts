@@ -3,5 +3,6 @@ declare namespace NodeJS {
     NODE_ENV: 'development' | 'production' | 'test'
     NEXT_AWS_REGION: string
     NEXT_PUBLIC_BASE_URL: string
+    NEXT_DYNAMODB_LOCAL: string
   }
 }

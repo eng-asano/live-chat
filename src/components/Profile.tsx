@@ -1,19 +1,45 @@
+'use server'
+
 import Image from 'next/image'
+import { getUserInfo } from '@/src/actions/auth'
 import { ThumbnailResponse } from '@/src/types/api'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
 export const Profile = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/thumbnails/us-tech/test1`)
-  const { img } = (await res.json()) as ThumbnailResponse
-
   return (
     <section className={styles.root}>
-      <Image src={img} width={120} height={120} alt="profile thumbnail" className={styles.thumbnail} />
-      <h2 className={styles.name}>David Peters</h2>
-      <span className={styles.post}>Senior Developer</span>
+      <Thumbnail />
+      <UserName />
     </section>
   )
+}
+
+const UserName = async () => {
+  const user = await getUserInfo()
+
+  if (!user) return <></>
+
+  return (
+    <>
+      <h2 className={styles.name}>{user.name}</h2>
+      <span className={styles.post}>{user['custom:post']}</span>
+    </>
+  )
+}
+
+const Thumbnail = async () => {
+  const user = await getUserInfo()
+
+  if (!user) return <></>
+
+  // ex. us-tech/us-test1.png
+  const thumbnailKey = user['custom:thumbnail_key']
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/thumbnails/${thumbnailKey}`)
+  const { img } = (await res.json()) as ThumbnailResponse
+
+  return <Image src={img} width={120} height={120} alt="profile thumbnail" className={styles.thumbnail} />
 }
 
 const styles = {

@@ -4,6 +4,7 @@ import { Auth } from '@aws-amplify/auth'
 import {
   CognitoIdentityProviderClient,
   AdminUpdateUserAttributesCommand,
+  ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
@@ -90,8 +91,8 @@ export async function verifyAccessToken() {
  * @param token 検証対象のJWTトークン
  */
 async function verifyToken(token?: string) {
-  const region = 'ap-northeast-1' // 使用しているCognitoのリージョン
-  const userPoolId = 'ap-northeast-1_RwRVqF57N' // CognitoのUser Pool ID
+  const region = authConfig.region
+  const userPoolId = authConfig.userPoolId
   const jwksUrl = `https://cognito-idp.${region}.amazonaws.com/${userPoolId}/.well-known/jwks.json`
 
   try {
@@ -112,9 +113,60 @@ async function verifyToken(token?: string) {
   }
 }
 
-/** JWTからユーザー情報を取得 */
+/** ユーザー情報を取得 */
 export async function getUserInfo() {
   const cookieStore = cookies()
   const value = cookieStore.get('idToken')?.value
   return value ? (decodeJwt(value) as UserInfo) : undefined
+}
+
+/** 全てのユーザー情報を取得 */
+export async function getUsersInfo() {
+  try {
+    const user = await getUserInfo()
+
+    if (!user) return []
+
+    const command = new ListUsersCommand({
+      UserPoolId: authConfig.userPoolId,
+      Limit: 60,
+    })
+
+    const { Users = [] } = await cognitoClient.send(command)
+
+    // 同じteam_codeに属する全ユーザーを取得
+    const teamUsers = Users.filter(({ Username, Attributes }) => {
+      // 自身の情報は除く
+      if (Username === user['cognito:username']) return false
+
+      return Attributes?.some(({ Name, Value }) => {
+        return Name === 'custom:team_code' && Value === user['custom:team_code']
+      })
+    })
+
+    // 必要なユーザー情報のみ抽出
+    const users = teamUsers?.map(({ Username = '', Attributes = [] }) => {
+      return Attributes.reduce<Partial<UserInfo>>(
+        (prev, { Name, Value = '' }) => {
+          switch (Name) {
+            case 'custom:team_code':
+            case 'name':
+            case 'given_name':
+            case 'family_name':
+            case 'custom:post':
+            case 'custom:thumbnail_key':
+              return { ...prev, [Name]: Value }
+            default:
+              return prev
+          }
+        },
+        { 'cognito:username': Username }
+      )
+    })
+
+    return users as UserInfo[]
+  } catch (error) {
+    console.error('Error fetching users:', error)
+    return []
+  }
 }

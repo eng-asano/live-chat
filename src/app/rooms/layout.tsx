@@ -1,5 +1,5 @@
 import { MdLogout } from 'react-icons/md'
-import { signOut } from '@/src/actions/auth'
+import { getUserInfo, getMembersInfo, signOut } from '@/src/actions/auth'
 import { Profile, Members } from '@/src/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
@@ -8,7 +8,13 @@ interface Props {
   children: React.ReactNode
 }
 
-export default function RoomsLayout({ children }: Readonly<Props>) {
+export default async function RoomsLayout({ children }: Readonly<Props>) {
+  const user = await getUserInfo()
+  const teamCode = user?.['custom:team_code']
+  const userId = user?.['cognito:username']
+
+  const members = await getMembersInfo()
+
   return (
     <div className={styles.root}>
       <div className={styles.side}>
@@ -18,7 +24,7 @@ export default function RoomsLayout({ children }: Readonly<Props>) {
         <Profile />
         <hr className={styles.separator_main} />
         <h2 className={styles.subTitle}>Members</h2>
-        <Members />
+        {teamCode && userId && <Members teamCode={teamCode} userId={userId} members={members} />}
         <form className={styles.form} action={signOut}>
           <hr className={styles.separator_sub} />
           <button className={styles.btn}>

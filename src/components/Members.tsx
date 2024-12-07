@@ -1,30 +1,59 @@
+'use client'
+
+import { memo } from 'react'
 import Image from 'next/image'
+import { ActivePoint } from '@/src/components'
+import { useLiveChat } from '@/src/hooks'
+import { MemberInfo } from '@/src/types/chat'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
-export const Members = () => {
-  return (
-    <div className={styles.root}>
-      <Member />
-      <Member />
-      <Member />
-      <Member />
-      <Member />
-    </div>
-  )
+interface MembersProps {
+  teamCode: string
+  userId: string
+  members: MemberInfo[]
 }
 
-const Member = () => {
+export const Members = memo(({ teamCode, userId, members }: MembersProps) => {
+  const { activeUserIds } = useLiveChat(teamCode, userId)
+
+  // 条件： アクティブ状態 > team_codeの昇順
+  const sortedMembers = members.sort((a, b) => {
+    const aIsActive = activeUserIds.includes(a['cognito:username'])
+    if (aIsActive) return -1
+
+    const bIsActive = activeUserIds.includes(b['cognito:username'])
+    if (bIsActive) return 1
+
+    return a['cognito:username'].localeCompare(b['cognito:username'])
+  })
+
+  return (
+    <div className={styles.root}>
+      {sortedMembers.map((m) => (
+        <Member key={m['cognito:username']} info={m} isActive={activeUserIds.includes(m['cognito:username'])} />
+      ))}
+    </div>
+  )
+})
+
+Members.displayName = 'Members'
+
+interface MemberProps {
+  info: MemberInfo
+  isActive: boolean
+}
+
+const Member = ({ info, isActive }: MemberProps) => {
   return (
     <div className={styles.member}>
-      <Image src="/images/woman.png" width={54} height={54} alt="member thumbnail" className={styles.thumbnail} />
+      <Image src={info.img} width={48} height={48} alt="member thumbnail" className={styles.thumbnail} />
       <section className={styles.info}>
-        <h3>Olivia Smith</h3>
-        <span className={styles.memo}>Software Engineer</span>
         <div className={styles.part}>
-          <span className={styles.memo}>LL&thinsp;10:35</span>
-          <div className={styles.point}></div>
+          <h3>{info.name}</h3>
+          <ActivePoint isActive={isActive} />
         </div>
+        <span className={styles.memo}>{info['custom:post']}</span>
       </section>
     </div>
   )
@@ -54,11 +83,12 @@ const styles = {
     fontWeight: 'bold',
   }),
   part: flex({
+    justify: 'space-between',
     align: 'center',
     columnGap: '8px',
   }),
   memo: css({
-    fontSize: '0.85rem',
+    fontSize: '0.9rem',
   }),
   point: css({
     width: '8px',

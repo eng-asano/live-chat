@@ -9,7 +9,9 @@ import {
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
 import { authConfig, cookieOption } from '@/src/utils/auth'
+import { ThumbnailResponse } from '@/src/types/api'
 import { UserInfo } from '@/src/types/cognito'
+import { MemberInfo } from '@/src/types/chat'
 
 Auth.configure(authConfig)
 
@@ -30,8 +32,6 @@ export async function signIn(_: { error: string } | undefined, formData: FormDat
       throw new Error('Incorrect team code.')
     }
 
-    await updateActiveFlag(user.username, true)
-
     const session = await Auth.currentSession()
     const idToken = session.getIdToken().getJwtToken()
     const accessToken = session.getAccessToken().getJwtToken()
@@ -47,12 +47,7 @@ export async function signIn(_: { error: string } | undefined, formData: FormDat
 /** Cognitoによる通常サインアウト */
 export async function signOut(_: FormData) {
   try {
-    const user = await getUserInfo()
-
-    if (user) {
-      await updateActiveFlag(user['cognito:username'], false)
-      await Auth.signOut()
-    }
+    await Auth.signOut()
 
     const cookieStore = cookies()
     cookieStore.delete('idToken')
@@ -60,16 +55,6 @@ export async function signOut(_: FormData) {
   } catch (e) {
     console.log(e)
   }
-}
-
-/** SignIn状態のフラグを更新 */
-async function updateActiveFlag(username: string, isActive: boolean) {
-  const command = new AdminUpdateUserAttributesCommand({
-    UserPoolId: authConfig.userPoolId,
-    Username: username,
-    UserAttributes: [{ Name: 'custom:is_active', Value: isActive ? '1' : '0' }],
-  })
-  await cognitoClient.send(command)
 }
 
 /** IDトークン（認証）の検証 */
@@ -121,7 +106,7 @@ export async function getUserInfo() {
 }
 
 /** 全てのユーザー情報を取得 */
-export async function getUsersInfo() {
+export async function getMembersInfo() {
   try {
     const user = await getUserInfo()
 
@@ -134,7 +119,7 @@ export async function getUsersInfo() {
 
     const { Users = [] } = await cognitoClient.send(command)
 
-    // 同じteam_codeに属する全ユーザーを取得
+    // 同じteam_codeに属するメンバーを取得
     const teamUsers = Users.filter(({ Username, Attributes }) => {
       // 自身の情報は除く
       if (Username === user['cognito:username']) return false
@@ -144,9 +129,9 @@ export async function getUsersInfo() {
       })
     })
 
-    // 必要なユーザー情報のみ抽出
-    const users = teamUsers?.map(({ Username = '', Attributes = [] }) => {
-      return Attributes.reduce<Partial<UserInfo>>(
+    // 必要なメンバー情報のみ抽出
+    const members = teamUsers?.map(async ({ Username = '', Attributes = [] }) => {
+      const info = Attributes.reduce<Partial<MemberInfo>>(
         (prev, { Name, Value = '' }) => {
           switch (Name) {
             case 'custom:team_code':
@@ -162,9 +147,17 @@ export async function getUsersInfo() {
         },
         { 'cognito:username': Username }
       )
+
+      // サムネイル画像の取得
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${info['custom:thumbnail_key']}`)
+      const { img } = (await res.json()) as ThumbnailResponse
+
+      return { ...info, img } as MemberInfo
     })
 
-    return users as UserInfo[]
+    const res = await Promise.all(members)
+
+    return res
   } catch (error) {
     console.error('Error fetching users:', error)
     return []

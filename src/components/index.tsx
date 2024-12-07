@@ -1,3 +1,4 @@
+export * from './ActivePoint'
 export * from './Members'
 export * from './Messages'
 export * from './MessageInput'

@@ -1,5 +1,3 @@
-'use server'
-
 import Image from 'next/image'
 import { getUserInfo } from '@/src/actions/auth'
 import { ThumbnailResponse } from '@/src/types/api'
@@ -36,7 +34,7 @@ const Thumbnail = async () => {
   // ex. us-tech/us-test1.png
   const thumbnailKey = user['custom:thumbnail_key']
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/thumbnails/${thumbnailKey}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${thumbnailKey}`)
   const { img } = (await res.json()) as ThumbnailResponse
 
   return <Image src={img} width={120} height={120} alt="profile thumbnail" className={styles.thumbnail} />

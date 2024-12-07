@@ -1,4 +1,4 @@
-export type ThumbnailResponse = {
+export interface ThumbnailResponse {
   img: string
   error?: string
 }

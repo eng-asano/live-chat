@@ -1,13 +1,26 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, memo } from 'react'
 import { MdSend } from 'react-icons/md'
+import { useLiveChat } from '@/src/hooks'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
-export const MessageInput = () => {
+interface Props {
+  teamCode: string
+  userId: string
+}
+
+export const MessageInput = memo(({ teamCode, userId }: Props) => {
   const [input, setInput] = useState('')
   const [lineLength, setLineLength] = useState(1)
+
+  const { sendContent } = useLiveChat(teamCode, userId)
+
+  const sendMessage = useCallback(() => {
+    sendContent?.(input, 'text')
+    setInput('')
+  }, [input, sendContent])
 
   const changeInput = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target
@@ -18,7 +31,7 @@ export const MessageInput = () => {
   }, [])
 
   return (
-    <form className={styles.root}>
+    <div className={styles.root}>
       <textarea
         className={styles.textarea}
         style={{ height: 42 + 14 * (lineLength - 1) }}
@@ -27,11 +40,13 @@ export const MessageInput = () => {
         placeholder="Send a message"
       />
       <button className={styles.btn}>
-        <MdSend className={styles.icon} size={24} />
+        <MdSend className={styles.icon} size={24} onClick={sendMessage} />
       </button>
-    </form>
+    </div>
   )
-}
+})
+
+MessageInput.displayName = 'MessageInput'
 
 const styles = {
   root: flex({}),

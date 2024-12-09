@@ -5,39 +5,45 @@ import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
 export const Profile = async () => {
+  const user = await getUserInfo()
+
+  if (!user) return <></>
+
   return (
     <section className={styles.root}>
-      <Thumbnail />
-      <UserName />
+      <Thumbnail teamCode={user['custom:team_code']} userId={user['cognito:username']} />
+      <UserName name={user.name} post={user['custom:post']} />
     </section>
   )
 }
 
-const UserName = async () => {
-  const user = await getUserInfo()
+interface UserNameProps {
+  name: string
+  post: string
+}
 
-  if (!user) return <></>
-
+const UserName = ({ name, post }: UserNameProps) => {
   return (
     <>
-      <h2 className={styles.name}>{user.name}</h2>
-      <span className={styles.post}>{user['custom:post']}</span>
+      <h2 className={styles.name}>{name}</h2>
+      <span className={styles.post}>{post}</span>
     </>
   )
 }
 
-const Thumbnail = async () => {
-  const user = await getUserInfo()
+interface ThumbnailProps {
+  teamCode: string
+  userId: string
+}
 
-  if (!user) return <></>
+const Thumbnail = async ({ teamCode, userId }: ThumbnailProps) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${teamCode}`)
 
-  // ex. us-tech/us-test1.png
-  const thumbnailKey = user['custom:thumbnail_key']
+  const { data } = (await res.json()) as ThumbnailResponse
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${thumbnailKey}`)
-  const { img } = (await res.json()) as ThumbnailResponse
+  if (!data) return <></>
 
-  return <Image src={img} width={120} height={120} alt="profile thumbnail" className={styles.thumbnail} />
+  return <Image src={data[userId]} width={120} height={120} alt="profile thumbnail" className={styles.thumbnail} />
 }
 
 const styles = {

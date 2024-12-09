@@ -3,19 +3,21 @@
 import { memo } from 'react'
 import Image from 'next/image'
 import { ActivePoint } from '@/src/components'
-import { useLiveChat } from '@/src/hooks'
-import { MemberInfo } from '@/src/types/chat'
+import { useLiveChat, useThumbnail } from '@/src/hooks'
+import { UserInfo } from '@/src/types/cognito'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
 interface MembersProps {
   teamCode: string
   userId: string
-  members: MemberInfo[]
+  members: UserInfo[]
 }
 
 export const Members = memo(({ teamCode, userId, members }: MembersProps) => {
   const { activeUserIds } = useLiveChat(teamCode, userId)
+
+  const { thumbnails } = useThumbnail(teamCode)
 
   // 条件： アクティブ状態 > team_codeの昇順
   const sortedMembers = members.sort((a, b) => {
@@ -28,10 +30,17 @@ export const Members = memo(({ teamCode, userId, members }: MembersProps) => {
     return a['cognito:username'].localeCompare(b['cognito:username'])
   })
 
+  if (!thumbnails) return <></>
+
   return (
     <div className={styles.root}>
       {sortedMembers.map((m) => (
-        <Member key={m['cognito:username']} info={m} isActive={activeUserIds.includes(m['cognito:username'])} />
+        <Member
+          key={m['cognito:username']}
+          info={m}
+          img={thumbnails[m['cognito:username']]}
+          isActive={activeUserIds.includes(m['cognito:username'])}
+        />
       ))}
     </div>
   )
@@ -40,14 +49,15 @@ export const Members = memo(({ teamCode, userId, members }: MembersProps) => {
 Members.displayName = 'Members'
 
 interface MemberProps {
-  info: MemberInfo
+  info: UserInfo
+  img: string
   isActive: boolean
 }
 
-const Member = ({ info, isActive }: MemberProps) => {
+const Member = ({ info, img, isActive }: MemberProps) => {
   return (
     <div className={styles.member}>
-      <Image src={info.img} width={48} height={48} alt="member thumbnail" className={styles.thumbnail} />
+      <Image src={img} width={48} height={48} alt="member thumbnail" className={styles.thumbnail} />
       <section className={styles.info}>
         <div className={styles.part}>
           <h3>{info.name}</h3>

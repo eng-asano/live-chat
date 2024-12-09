@@ -1,54 +1,53 @@
+'use client'
+
+import { memo } from 'react'
 import Image from 'next/image'
-import React from 'react'
+import { useLiveChat, useThumbnail } from '@/src/hooks'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 import { separator, messageText } from '@/styled-system/recipes'
 
-export const Messages = () => {
+interface MessagesProps {
+  teamCode: string
+  userId: string
+}
+
+export const Messages = memo(({ teamCode, userId }: MessagesProps) => {
+  const { messages } = useLiveChat(teamCode, userId)
+
+  const { thumbnails } = useThumbnail(teamCode)
+
+  if (!thumbnails) return <></>
+
   return (
     <div className={styles.root}>
       <div className={`${separator()} ${styles.separator}`}>Today</div>
-      <ImageMessage text="Nice to meet you, my name is Olivia." thumbnail="/images/woman.png" />
-      <p className={`${messageText()} ${styles.memberText}`}>
-        Starting today, I will be working at Tech Co., Ltd. I apologize for any inconvenience I may cause as a newbie,
-        but I appreciate your help.
-      </p>
-      <p className={`${messageText()} ${styles.userText}`}>
-        Nice to meet you! I&apos;m David, a senior developer. If you have any questions, feel free to ask me anything.
-        I&apos;m looking forward to hearing from you!
-      </p>
-      <ImageMessage text="Nice to meet you, my name is Olivia." thumbnail="/images/woman.png" />
-      <p className={`${messageText()} ${styles.memberText}`}>
-        Starting today, I will be working at Tech Co., Ltd. I apologize for any inconvenience I may cause as a newbie,
-        but I appreciate your help.
-      </p>
-      <p className={`${messageText()} ${styles.memberText}`}>
-        Starting today, I will be working at Tech Co., Ltd. I apologize for any inconvenience I may cause as a newbie,
-        but I appreciate your help.
-      </p>
-      <p className={`${messageText()} ${styles.memberText}`}>
-        Starting today, I will be working at Tech Co., Ltd. I apologize for any inconvenience I may cause as a newbie,
-        but I appreciate your help.
-      </p>
-      <p className={`${messageText()} ${styles.userText}`}>
-        Nice to meet you! I&apos;m David, a senior developer. If you have any questions, feel free to ask me anything.
-        I&apos;m looking forward to hearing from you!
-      </p>
-      <ImageMessage text="Nice to meet you, my name is Olivia." thumbnail="/images/woman.png" />
-      <p className={`${messageText()} ${styles.memberText}`}>
-        Starting today, I will be working at Tech Co., Ltd. I apologize for any inconvenience I may cause as a newbie,
-        but I appreciate your help.
-      </p>
-      <p className={`${messageText()} ${styles.memberText}`}>
-        Starting today, I will be working at Tech Co., Ltd. I apologize for any inconvenience I may cause as a newbie,
-        but I appreciate your help.
-      </p>
-      <p className={`${messageText()} ${styles.userText}`}>
-        Nice to meet you! I&apos;m David, a senior developer. If you have any questions, feel free to ask me anything.
-        I&apos;m looking forward to hearing from you!
-      </p>
+      {messages?.map((m, i) =>
+        m.user_id === userId ? (
+          <UserMessage key={m.created_at} text={m.content} />
+        ) : m.user_id === messages?.[i - 1]?.user_id ? (
+          // 同じユーザーからの連続投稿の場合はメッセージのみ表示
+          <MemberMessage key={m.created_at} text={m.content} />
+        ) : (
+          <ImageMessage key={m.created_at} text={m.content} thumbnail={thumbnails[m.user_id]} />
+        )
+      )}
     </div>
   )
+})
+
+Messages.displayName = 'Messages'
+
+interface MessageProps {
+  text: string
+}
+
+const UserMessage = ({ text }: MessageProps) => {
+  return <p className={`${messageText()} ${styles.userText}`}>{text}</p>
+}
+
+const MemberMessage = ({ text }: MessageProps) => {
+  return <p className={`${messageText()} ${styles.memberText}`}>{text}</p>
 }
 
 const ImageMessage = ({ text, thumbnail }: { text: string; thumbnail: string }) => {
@@ -73,6 +72,9 @@ const styles = {
   }),
   thumbnail: css({
     flexShrink: '0',
+    '& img': {
+      borderRadius: '50%',
+    },
   }),
   userText: css({
     alignSelf: 'flex-end',

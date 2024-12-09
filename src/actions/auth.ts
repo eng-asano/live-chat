@@ -1,17 +1,11 @@
 'use server'
 
 import { Auth } from '@aws-amplify/auth'
-import {
-  CognitoIdentityProviderClient,
-  AdminUpdateUserAttributesCommand,
-  ListUsersCommand,
-} from '@aws-sdk/client-cognito-identity-provider'
+import { CognitoIdentityProviderClient, ListUsersCommand } from '@aws-sdk/client-cognito-identity-provider'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
 import { authConfig, cookieOption } from '@/src/utils/auth'
-import { ThumbnailResponse } from '@/src/types/api'
 import { UserInfo } from '@/src/types/cognito'
-import { MemberInfo } from '@/src/types/chat'
 
 Auth.configure(authConfig)
 
@@ -131,7 +125,7 @@ export async function getMembersInfo() {
 
     // 必要なメンバー情報のみ抽出
     const members = teamUsers?.map(async ({ Username = '', Attributes = [] }) => {
-      const info = Attributes.reduce<Partial<MemberInfo>>(
+      return Attributes.reduce<Partial<UserInfo>>(
         (prev, { Name, Value = '' }) => {
           switch (Name) {
             case 'custom:team_code':
@@ -147,17 +141,11 @@ export async function getMembersInfo() {
         },
         { 'cognito:username': Username }
       )
-
-      // サムネイル画像の取得
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${info['custom:thumbnail_key']}`)
-      const { img } = (await res.json()) as ThumbnailResponse
-
-      return { ...info, img } as MemberInfo
     })
 
     const res = await Promise.all(members)
 
-    return res
+    return res as UserInfo[]
   } catch (error) {
     console.error('Error fetching users:', error)
     return []

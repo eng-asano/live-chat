@@ -1,4 +1,4 @@
 export interface ThumbnailResponse {
-  img: string
+  data?: { [key: string]: string }
   error?: string
 }

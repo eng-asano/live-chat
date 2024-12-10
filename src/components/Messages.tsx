@@ -1,8 +1,12 @@
 'use client'
 
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import Image from 'next/image'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import moment from 'moment'
 import { useLiveChat, useThumbnail } from '@/src/hooks'
+import { formatISO8601 } from '@/src/utils/data'
+import { Message } from '@/src/types'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 import { separator, messageText } from '@/styled-system/recipes'
@@ -13,61 +17,150 @@ interface MessagesProps {
 }
 
 export const Messages = memo(({ teamCode, userId }: MessagesProps) => {
-  const { messages } = useLiveChat(teamCode, userId)
+  const { messages, hasMoreMessage, loadPrevMessages } = useLiveChat(teamCode, userId)
 
   const { thumbnails } = useThumbnail(teamCode)
+
+  const nextMessages = useCallback(() => {
+    loadPrevMessages?.()
+  }, [loadPrevMessages])
 
   if (!thumbnails) return <></>
 
   return (
-    <div className={styles.root}>
-      <div className={`${separator()} ${styles.separator}`}>Today</div>
-      {messages?.map((m, i) =>
-        m.user_id === userId ? (
-          <UserMessage key={m.created_at} text={m.content} />
-        ) : m.user_id === messages?.[i - 1]?.user_id ? (
-          // 同じユーザーからの連続投稿の場合はメッセージのみ表示
-          <MemberMessage key={m.created_at} text={m.content} />
-        ) : (
-          <ImageMessage key={m.created_at} text={m.content} thumbnail={thumbnails[m.user_id]} />
-        )
-      )}
+    <div id="message-scroll" className={styles.root}>
+      <InfiniteScroll
+        dataLength={messages.length}
+        next={nextMessages}
+        hasMore={hasMoreMessage}
+        inverse={true}
+        loader={undefined}
+        scrollableTarget="message-scroll"
+        className={styles.scroll}
+      >
+        <div className={styles.messages}>
+          {messages.map((m, i) => (
+            <Content
+              key={m.created_at}
+              userId={userId}
+              content={m.content}
+              createdAt={m.created_at}
+              memberId={m.user_id}
+              prevContent={messages?.[i - 1]}
+              thumbnails={thumbnails}
+            />
+          ))}
+        </div>
+      </InfiniteScroll>
     </div>
   )
 })
 
 Messages.displayName = 'Messages'
 
+interface ContentProps {
+  userId: string
+  content: string
+  createdAt: string
+  memberId: string
+  prevContent?: Message
+  thumbnails: { [key: string]: string }
+}
+
+const Content = ({ content, memberId, createdAt, prevContent, userId, thumbnails }: ContentProps) => {
+  const date = formatISO8601(createdAt)
+  const prevData = prevContent?.created_at && formatISO8601(prevContent.created_at)
+
+  return (
+    <>
+      {date !== prevData && (
+        <div className={`${separator()} ${styles.date}`}>
+          <span>{date}</span>
+        </div>
+      )}
+      {memberId === userId ? (
+        <UserMessage text={content} createdAt={createdAt} />
+      ) : memberId === prevContent?.user_id ? (
+        // 同じユーザーからの連続投稿の場合はメッセージのみ表示
+        <MemberMessage text={content} createdAt={createdAt} />
+      ) : (
+        <ImageMessage text={content} createdAt={createdAt} thumbnail={thumbnails[memberId]} />
+      )}
+    </>
+  )
+}
+
 interface MessageProps {
   text: string
+  createdAt: string
 }
 
-const UserMessage = ({ text }: MessageProps) => {
-  return <p className={`${messageText()} ${styles.userText}`}>{text}</p>
-}
+const UserMessage = ({ text, createdAt }: MessageProps) => {
+  const time = moment(createdAt).format('HH:mm')
 
-const MemberMessage = ({ text }: MessageProps) => {
-  return <p className={`${messageText()} ${styles.memberText}`}>{text}</p>
-}
-
-const ImageMessage = ({ text, thumbnail }: { text: string; thumbnail: string }) => {
   return (
-    <div className={styles.message}>
+    <p className={`${styles.userArea}`}>
+      <time className={styles.time} datatype={createdAt}>
+        {time}
+      </time>
+      <span className={`${messageText()} ${styles.userText}`}>{text}</span>
+    </p>
+  )
+}
+
+const MemberMessage = ({ text, createdAt }: MessageProps) => {
+  const time = moment(createdAt).format('HH:mm')
+
+  return (
+    <p className={`${styles.memberArea}`}>
+      <span className={`${messageText()} ${styles.memberText}`}>{text}</span>
+      <time className={styles.time} datatype={createdAt}>
+        {time}
+      </time>
+    </p>
+  )
+}
+
+const ImageMessage = ({ text, createdAt, thumbnail }: { text: string; createdAt: string; thumbnail: string }) => {
+  const time = moment(createdAt).format('HH:mm')
+
+  return (
+    <div className={styles.imgMessage}>
       <div className={styles.thumbnail}>
         <Image src={thumbnail} width={48} height={48} alt="thumbnail" />
       </div>
-      <p className={messageText()}>{text}</p>
+      <p className={styles.memberArea}>
+        <span className={messageText()}>{text}</span>
+        <time className={styles.time} datatype={createdAt}>
+          {time}
+        </time>
+      </p>
     </div>
   )
 }
 
 const styles = {
   root: flex({
+    w: '100%',
+    h: 'calc(100dvh - 90px)',
+    p: '32px',
+    flexDirection: 'column-reverse',
+    overflowY: 'auto',
+  }),
+  scroll: flex({
+    flexDirection: 'column-reverse',
+    position: 'relative',
+    w: '100%',
+    maxW: '1280px',
+    m: '0 auto',
+    pb: '32px',
+  }),
+  messages: flex({
     direction: 'column',
-    rowGap: '8px',
+    rowGap: '16px',
     color: 'font.dark',
   }),
-  message: flex({
+  imgMessage: flex({
     columnGap: '24px',
   }),
   thumbnail: css({
@@ -76,14 +169,28 @@ const styles = {
       borderRadius: '50%',
     },
   }),
-  userText: css({
+  userArea: flex({
     alignSelf: 'flex-end',
+    columnGap: '4px',
+  }),
+  userText: css({
     bgColor: 'message.user',
   }),
+  memberArea: flex({}),
   memberText: css({
     ml: '72px',
   }),
-  separator: css({
+  date: css({
     mb: '24px',
+    '& span': {
+      flexShrink: '0',
+    },
+  }),
+  time: css({
+    flexShrink: '0',
+    alignSelf: 'flex-end',
+    pb: '2px',
+    fontSize: '0.9rem',
+    color: 'gray.500',
   }),
 }

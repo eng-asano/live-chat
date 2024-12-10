@@ -16,11 +16,7 @@ export default async function Rooms() {
 
   return (
     <div className={styles.root}>
-      <div className={styles.scroll}>
-        <div className={styles.messages}>
-          <Messages teamCode={teamCode} userId={userId} />
-        </div>
-      </div>
+      <Messages teamCode={teamCode} userId={userId} />
       <div className={styles.shadow}>
         <div className={styles.input}>
           <MessageInput teamCode={teamCode} userId={userId} />
@@ -36,17 +32,6 @@ const styles = {
     direction: 'column',
     justify: 'space-between',
     w: '100%',
-    m: '0 auto',
-  }),
-  scroll: css({
-    w: '100%',
-    h: 'calc(100dvh - 90px)',
-    p: '32px',
-    overflowY: 'scroll',
-  }),
-  messages: css({
-    position: 'relative',
-    maxW: '1280px',
     m: '0 auto',
   }),
   shadow: css({

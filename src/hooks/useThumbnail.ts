@@ -6,7 +6,8 @@ import { ThumbnailResponse } from '@/src/types/api'
 export const useThumbnail = (teamCode: string) => {
   const { data } = useSWR<ThumbnailResponse>(
     `${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${teamCode}`,
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   )
 
   return { thumbnails: data?.data }

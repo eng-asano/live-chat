@@ -7,7 +7,7 @@ import { separator } from '@/styled-system/recipes'
 
 export default async function Login() {
   const res = await verifyIdToken()
-  if (res.status === 'success') redirect('/rooms')
+  if (res.status === 'success') redirect('/dashboard')
 
   return (
     <div className={styles.root}>

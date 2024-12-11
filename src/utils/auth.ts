@@ -5,7 +5,7 @@ export const authConfig = {
   oauth: {
     domain: 'live-chat.auth.ap-northeast-1.amazoncognito.com',
     scope: ['openid', 'phone', 'email'],
-    redirectSignIn: 'http://localhost:3000/rooms',
+    redirectSignIn: 'http://localhost:3000/dashboard',
     redirectSignOut: 'http://localhost:3000/sign-in',
     responseType: 'code',
   },

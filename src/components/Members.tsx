@@ -73,9 +73,10 @@ const styles = {
   root: flex({
     direction: 'column',
     rowGap: '32px',
-    marginTop: '24px',
-    marginRight: '-12px',
-    paddingRight: '12px',
+    mt: '24px',
+    mr: '-12px',
+    pb: '12px',
+    pr: '12px',
     overflowY: 'auto',
   }),
   member: flex({
@@ -89,7 +90,7 @@ const styles = {
   info: flex({
     direction: 'column',
     rowGap: '8px',
-    width: '100%',
+    w: '100%',
     fontWeight: 'bold',
   }),
   part: flex({
@@ -101,9 +102,9 @@ const styles = {
     fontSize: '0.9rem',
   }),
   point: css({
-    width: '8px',
-    height: '8px',
+    w: '8px',
+    h: '8px',
     borderRadius: '50%',
-    background: 'accent.main',
+    bg: 'accent.main',
   }),
 }

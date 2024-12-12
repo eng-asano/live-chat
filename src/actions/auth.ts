@@ -41,11 +41,11 @@ export async function signIn(_: { error: string } | undefined, formData: FormDat
 /** Cognitoによる通常サインアウト */
 export async function signOut(_: FormData) {
   try {
-    await Auth.signOut()
-
     const cookieStore = cookies()
     cookieStore.delete('idToken')
     cookieStore.delete('accessToken')
+
+    Auth.signOut()
   } catch (e) {
     console.log(e)
   }

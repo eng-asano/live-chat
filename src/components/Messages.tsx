@@ -142,10 +142,14 @@ const ImageMessage = ({ text, createdAt, thumbnail }: { text: string; createdAt:
 const styles = {
   root: flex({
     w: '100%',
-    h: 'calc(100dvh - 90px)',
+    h: 'calc(100dvh - 138px)',
     p: '32px',
     flexDirection: 'column-reverse',
     overflowY: 'auto',
+
+    sm: {
+      h: 'calc(100dvh - 90px)',
+    },
   }),
   scroll: flex({
     flexDirection: 'column-reverse',

@@ -153,7 +153,6 @@ const styles = {
     w: '100%',
     maxW: '1280px',
     m: '0 auto',
-    pb: '32px',
   }),
   messages: flex({
     direction: 'column',
@@ -172,6 +171,7 @@ const styles = {
   userArea: flex({
     alignSelf: 'flex-end',
     columnGap: '4px',
+    pl: '32px',
   }),
   userText: css({
     bgColor: 'message.user',

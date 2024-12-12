@@ -89,7 +89,7 @@ const styles = {
       position: 'fixed',
       bottom: '20px',
       right: '20px',
-      minW: '390px',
+      minW: '320px',
       zIndex: '10',
     }),
     root: flex({

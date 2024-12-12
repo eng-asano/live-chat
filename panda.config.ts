@@ -18,6 +18,18 @@ const globalCss = defineGlobalStyles({
   button: {
     cursor: 'pointer',
   },
+  // スクロールバーのデザイン
+  '::-webkit-scrollbar': {
+    w: '6px',
+    h: '6px',
+    borderRadius: '6px',
+  },
+  '::-webkit-scrollbar-thumb': {
+    w: '6px',
+    h: '6px',
+    bg: 'gray.400',
+    borderRadius: '6px',
+  },
 })
 
 export default defineConfig({

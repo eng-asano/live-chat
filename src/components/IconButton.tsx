@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { MdChat, MdLogout } from 'react-icons/md'
 import { flex } from '@/styled-system/patterns'
 
@@ -7,17 +8,20 @@ interface Props {
   children: React.ReactNode
   icon: 'chat' | 'sign-out'
   isActive?: boolean
+  onClick?: () => void
 }
 
-export const IconButton = ({ children, icon, isActive }: Props) => {
+export const IconButton = memo(({ children, icon, isActive, onClick }: Props) => {
   return (
-    <button className={styles.btn(isActive)}>
+    <button className={styles.btn(isActive)} onClick={onClick}>
       {icon === 'chat' && <MdChat size={24} color="#fff" />}
       {icon === 'sign-out' && <MdLogout size={24} color="#fff" />}
       {children}
     </button>
   )
-}
+})
+
+IconButton.displayName = 'IconButton'
 
 const styles = {
   btn: (isActive?: boolean) =>

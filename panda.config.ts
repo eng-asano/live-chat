@@ -10,7 +10,7 @@ const globalCss = defineGlobalStyles({
     wordWrap: 'break-word',
     overflowWrap: 'break-word',
     wordBreak: 'break-all',
-    overflowY: 'hidden',
+    overflow: 'hidden',
   },
   html: {
     '--global-font-body': 'Roboto, sans-serif',

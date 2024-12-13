@@ -59,6 +59,7 @@ const styles = {
     bgColor: 'background.light',
     borderRadius: '8px 0 0 8px',
     outline: 'none',
+    overflow: 'hidden',
   }),
   btn: css({
     p: '8px',

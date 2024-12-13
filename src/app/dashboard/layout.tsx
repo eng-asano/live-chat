@@ -1,4 +1,5 @@
-import { getUserInfo, getMembersInfo } from '@/src/actions/auth'
+import { redirect } from 'next/navigation'
+import { verifyIdToken, getUserInfo, getMembersInfo } from '@/src/actions/auth'
 import { Profile, Members, Navigation } from '@/src/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
@@ -8,9 +9,15 @@ interface Props {
 }
 
 export default async function RoomsLayout({ children }: Readonly<Props>) {
+  const res = await verifyIdToken()
+
+  if (res.status === 'error') redirect('/sign-in')
+
   const user = await getUserInfo()
   const teamCode = user?.['custom:team_code']
   const userId = user?.['cognito:username']
+
+  if (!teamCode || !userId) return <></>
 
   const members = await getMembersInfo()
 
@@ -23,7 +30,7 @@ export default async function RoomsLayout({ children }: Readonly<Props>) {
         <Profile />
         <hr className={styles.separator} />
         <h2 className={styles.subTitle}>Members</h2>
-        {teamCode && userId && <Members teamCode={teamCode} userId={userId} members={members} />}
+        <Members teamCode={teamCode} userId={userId} members={members} />
         <Navigation />
       </div>
       {children}
@@ -32,7 +39,9 @@ export default async function RoomsLayout({ children }: Readonly<Props>) {
 }
 
 const styles = {
-  root: flex({}),
+  root: flex({
+    animation: 'fadeIn 0.5s ease-in',
+  }),
   side: flex({
     direction: 'column',
     flexShrink: '0',

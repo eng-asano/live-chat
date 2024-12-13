@@ -26,5 +26,6 @@ export default function RootLayout({ children }: Readonly<Props>) {
 const styles = {
   root: css({
     h: '100dvh',
+    bg: 'primary.main',
   }),
 }

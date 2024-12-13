@@ -107,6 +107,10 @@ export default defineConfig({
           from: { opacity: 1, transform: 'translateX(0)' },
           to: { opacity: 0, transform: 'translateX(100%)' },
         },
+        fadeIn: {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
       },
     },
   },

@@ -31,6 +31,7 @@ const styles = {
     align: 'center',
     h: '100%',
     bg: 'background.main',
+    animation: 'fadeIn 0.5s ease-in',
   }),
   login: flex({
     direction: 'column',

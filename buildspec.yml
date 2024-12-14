@@ -1,5 +1,16 @@
 version: 0.2
 
+env:
+  parameter-store:
+    AWS_REGION: '/live-chat/develop/AWS_REGION'
+    COGNITO_POOL_ID: '/live-chat/develop/COGNITO_POOL_ID'
+    COGNITO_POOL_CLIENT_ID: '/live-chat/develop/COGNITO_POOL_CLIENT_ID'
+    COGNITO_DOMAIN: '/live-chat/develop/COGNITO_DOMAIN'
+    COGNITO_REDIRECT_SIGN_IN: '/live-chat/develop/COGNITO_REDIRECT_SIGN_IN'
+    COGNITO_REDIRECT_SIGN_OUT: '/live-chat/develop/COGNITO_REDIRECT_SIGN_OUT'
+    NEXT_PUBLIC_API_ROUTE_URL: '/live-chat/develop/NEXT_PUBLIC_API_ROUTE_URL'
+    NEXT_PUBLIC_LIVE_CHAT_WEBSOCKET: '/live-chat/develop/NEXT_PUBLIC_LIVE_CHAT_WEBSOCKET'
+
 phases:
   install:
     runtime-versions:

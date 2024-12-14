@@ -6,11 +6,11 @@ phases:
       nodejs: 20.17.0
   pre_build:
     commands:
-      - npm install -g yarn
-      - yarn install
+      - npm i -g pnpm@9.15.0
+      - pnpm i --frozen-lockfile
   build:
     commands:
-      - yarn build
+      - pnpm build
       - zip -ry build.zip node_modules .next public package.json
 artifacts:
   files:

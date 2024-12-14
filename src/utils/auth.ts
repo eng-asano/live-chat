@@ -1,9 +1,9 @@
 export const authConfig = {
-  region: 'ap-northeast-1',
-  userPoolId: 'ap-northeast-1_RwRVqF57N',
-  userPoolWebClientId: 'bcd6meqbl1216p29ialgo21ej',
+  region: process.env.AWS_REGION,
+  userPoolId: process.env.COGNITO_POOL_ID,
+  userPoolWebClientId: process.env.COGNITO_POOL_CLIENT_ID,
   oauth: {
-    domain: 'live-chat.auth.ap-northeast-1.amazoncognito.com',
+    domain: process.env.COGNITO_DOMAIN,
     scope: ['openid', 'phone', 'email'],
     redirectSignIn: 'http://localhost:3000/dashboard',
     redirectSignOut: 'http://localhost:3000/sign-in',

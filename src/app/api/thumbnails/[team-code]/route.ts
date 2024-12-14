@@ -9,7 +9,7 @@ interface Params {
   'user-id': string
 }
 
-const s3 = new S3Client({ region: process.env.NEXT_AWS_REGION })
+const s3 = new S3Client({ region: process.env.AWS_REGION })
 
 export async function GET(_: Request, { params }: { params: Params }): Promise<NextResponse<ThumbnailResponse>> {
   const listCommand = new ListObjectsV2Command({

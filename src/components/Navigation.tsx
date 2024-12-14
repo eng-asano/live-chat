@@ -2,10 +2,9 @@
 
 import { useCallback } from 'react'
 import { useAtom } from 'jotai'
-import { useMediaQuery } from 'react-responsive'
 import { activeNavAtom } from '@/src/store'
 import { signOut } from '@/src/actions/auth'
-import { useClient } from '@/src/hooks'
+import { useClient, useMedia } from '@/src/hooks'
 import { IconButton } from '@/src/components'
 import { flex } from '@/styled-system/patterns'
 
@@ -14,7 +13,7 @@ export const Navigation = () => {
 
   const { isClient } = useClient()
 
-  const isPCorTablet = useMediaQuery({ query: '(min-width: 640px)' })
+  const { isSP } = useMedia()
 
   const switchToChat = useCallback(() => {
     setActiveNav('chat')
@@ -24,7 +23,7 @@ export const Navigation = () => {
 
   // PCまたはTabletの場合、チャット画面を常に表示する
   // SPのみユーザー画面とチャット画面を切り替えて表示する
-  const isChatActive = isPCorTablet || activeNav === 'chat'
+  const isChatActive = !isSP || activeNav === 'chat'
 
   return (
     <nav className={styles.root}>

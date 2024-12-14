@@ -142,7 +142,7 @@ const ImageMessage = ({ text, createdAt, thumbnail }: { text: string; createdAt:
 const styles = {
   root: flex({
     w: '100%',
-    h: 'calc(100dvh - 138px)',
+    h: 'calc(100dvh - 104px)',
     p: '32px',
     flexDirection: 'column-reverse',
     overflowY: 'auto',

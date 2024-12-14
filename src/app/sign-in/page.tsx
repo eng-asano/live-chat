@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
 import { verifyIdToken } from '@/src/actions/auth'
-import { SignInForm, SocialSignIn } from '@/src/components'
+import { SignInForm } from '@/src/components'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
-import { separator } from '@/styled-system/recipes'
+// import { separator } from '@/styled-system/recipes'
 
 export default async function Login() {
   const res = await verifyIdToken()
@@ -16,10 +16,10 @@ export default async function Login() {
           <h1 className={styles.title}>Live&thinsp;Chat</h1>
         </div>
         <SignInForm />
-        <div className={styles.other}>
+        {/* <div className={styles.other}>
           <div className={`${separator()} ${styles.or}`}>or</div>
           <SocialSignIn />
-        </div>
+        </div> */}
       </section>
     </div>
   )
@@ -64,12 +64,12 @@ const styles = {
     textAlign: 'center',
     color: 'primary.main',
   }),
-  other: flex({
-    direction: 'column',
-    align: 'center',
-    rowGap: '16px',
-  }),
-  or: css({
-    fontSize: '1.1rem',
-  }),
+  // other: flex({
+  //   direction: 'column',
+  //   align: 'center',
+  //   rowGap: '16px',
+  // }),
+  // or: css({
+  //   fontSize: '1.1rem',
+  // }),
 }

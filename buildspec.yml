@@ -17,6 +17,7 @@ phases:
       nodejs: 20.17.0
   pre_build:
     commands:
+      - echo "API Key is $COGNITO_POOL_ID"
       - npm i -g pnpm@9.15.0
       - pnpm i --frozen-lockfile
   build:

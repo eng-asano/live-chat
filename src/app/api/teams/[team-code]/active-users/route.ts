@@ -29,7 +29,7 @@ export async function GET(_: Request, { params }: { params: Params }) {
   try {
     const res = await client.send(command)
     return NextResponse.json(res.Items)
-  } catch (e) {
+  } catch {
     // console.error(e)
     return NextResponse.json({ error: 'Failed to active user data.' })
   }

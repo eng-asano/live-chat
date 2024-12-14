@@ -64,17 +64,22 @@ const styles = {
     w: 'calc(100% - 64px)',
     maxW: '1280px',
     m: '0 auto',
-    p: '24px 0',
+    p: '12px 0',
+
+    sm: {
+      p: '24px 0',
+    },
   }),
   header: flex({
     align: 'center',
-    h: '48px',
+    h: '42px',
     p: '0 16px',
     boxShadow: '6px -6px 16px',
     boxShadowColor: 'boxShadow.main',
 
     sm: {
       display: 'none',
+      h: '48px',
     },
   }),
   title: css({

@@ -31,6 +31,7 @@ export async function GET(_: Request, { params }: { params: Params }) {
     return NextResponse.json(res.Items)
   } catch {
     // console.error(e)
-    return NextResponse.json({ error: 'Failed to active user data.' })
+    return NextResponse.json([])
+    // return NextResponse.json({ error: 'Failed to active user data.' })
   }
 }

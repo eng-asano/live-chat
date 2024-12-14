@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useCallback, memo } from 'react'
+import { useState, useCallback, useEffect, memo } from 'react'
 import { MdSend } from 'react-icons/md'
-import { useLiveChat } from '@/src/hooks'
+import { useLiveChat, useClient, useMedia } from '@/src/hooks'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 
@@ -15,7 +15,9 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
   const [input, setInput] = useState('')
   const [lineLength, setLineLength] = useState(1)
 
+  const { isClient } = useClient()
   const { sendContent } = useLiveChat(teamCode, userId)
+  const { isSP } = useMedia()
 
   const sendMessage = useCallback(() => {
     sendContent?.(input, 'text')
@@ -30,11 +32,13 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
     if (lines.length < 6) setLineLength(lines.length)
   }, [])
 
+  if (!isClient) return <></>
+
   return (
     <div className={styles.root}>
       <textarea
         className={styles.textarea}
-        style={{ height: 42 + 14 * (lineLength - 1) }}
+        style={{ height: isSP ? 36 + 14 * (lineLength - 1) : 42 + 14 * (lineLength - 1) }}
         value={input}
         onChange={changeInput}
         placeholder="Send a message"
@@ -53,19 +57,28 @@ const styles = {
   textarea: css({
     resize: 'none',
     w: '100%',
-    p: '12px',
+    p: '8px',
     fontSize: '1.2rem',
-    lineHeight: '1.5rem',
+    lineHeight: '1.6rem',
     bgColor: 'background.light',
     borderRadius: '8px 0 0 8px',
     outline: 'none',
     overflow: 'hidden',
+
+    sm: {
+      p: '12px',
+      lineHeight: '1.5rem',
+    },
   }),
   btn: css({
-    p: '8px',
+    p: '6px',
     bgColor: 'background.light',
     borderRadius: '0 8px 8px 0',
     outlineColor: 'primary.main',
+
+    sm: {
+      p: '8px',
+    },
   }),
   icon: css({
     color: 'primary.main',

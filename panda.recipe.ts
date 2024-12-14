@@ -45,7 +45,7 @@ export const messageTextRecipe = defineRecipe({
     fontSize: '1.2rem',
     lineHeight: '1.8rem',
     bgColor: 'message.member',
-    borderRadius: '32px',
+    borderRadius: '24px',
     whiteSpace: 'pre-wrap',
   },
 })

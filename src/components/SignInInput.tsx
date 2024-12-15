@@ -77,6 +77,7 @@ const styles = {
     height: '100%',
     paddingLeft: '48px',
     color: 'gray.600',
+    bg: 'white',
     borderRadius: '24px',
   }),
 }

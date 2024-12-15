@@ -50,7 +50,6 @@ const styles = {
     h: '100dvh',
     p: '32px 32px 0',
     color: '#fff',
-    bg: 'background.main',
 
     sm: {
       flexShrink: '1',

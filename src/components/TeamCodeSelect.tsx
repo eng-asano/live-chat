@@ -44,7 +44,9 @@ TeamCodeSelect.displayName = 'TeamCodeSelect'
 const styles = {
   trigger: flex({
     align: 'center',
+    w: '100%',
     h: '50px',
+    bg: 'white',
     borderRadius: '24px',
   }),
   icon: css({

@@ -61,13 +61,15 @@ export const SignInForm = () => {
 const styles = {
   form: flex({
     direction: 'column',
-    rowGap: '32px',
+    align: 'center',
+    rowGap: '36px',
   }),
   signIn: css({
-    w: '100%',
+    w: '200px',
     h: '50px',
     fontSize: '1.125rem',
     fontWeight: 'bold',
+    bg: 'white',
     borderRadius: '24px',
     color: 'gray.700',
     _hover: {

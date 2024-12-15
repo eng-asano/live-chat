@@ -3,7 +3,7 @@ import { loginUIBaseRecipe, separatorRecipe, messageTextRecipe } from './panda.r
 
 const globalCss = defineGlobalStyles({
   'html, body': {
-    fontSize: '12px',
+    fontSize: '14px',
     letterSpacing: '0.1rem',
     color: 'font.main',
     lineHeight: '1rem',

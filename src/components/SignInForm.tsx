@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import * as Toast from '@radix-ui/react-toast'
 import { MdHighlightOff } from 'react-icons/md'
@@ -12,25 +12,28 @@ import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
 import { loginUIBase } from '@/styled-system/recipes'
 
-const duration = 3000
-
 export const SignInForm = () => {
   const [res, formAction, isPending] = useActionStateCompat(signIn, undefined)
 
   const [teamCode, setTeamCode] = useState('')
   const [userId, setUserId] = useState('')
   const [password, setPassword] = useState('')
+  const [openToast, setOpenToast] = useState(false)
   const [error, setError] = useState<string>()
 
   const { isClient } = useClient()
 
+  const closeToast = useCallback(async (open: boolean) => {
+    if (open) return
+    setOpenToast(false)
+    await new Promise((r) => setTimeout(r, 1000))
+    setError(undefined)
+  }, [])
+
   useEffect(() => {
-    const f = async () => {
-      setError(res?.error)
-      await new Promise((r) => setTimeout(r, duration))
-      setError(undefined)
-    }
-    f()
+    if (!res?.error) return
+    setError(res.error)
+    setOpenToast(true)
   }, [res])
 
   const disabled = teamCode === '' || userId === '' || password === '' || isPending || error !== undefined
@@ -45,8 +48,14 @@ export const SignInForm = () => {
       </button>
       {isClient &&
         createPortal(
-          <Toast.Provider swipeDirection="right" duration={duration}>
-            <Toast.Root open={!!error} className={styles.toast.root} defaultOpen={false}>
+          <Toast.Provider swipeDirection="right">
+            <Toast.Root
+              open={openToast}
+              className={styles.toast.root}
+              defaultOpen={false}
+              duration={2000}
+              onOpenChange={closeToast}
+            >
               <MdHighlightOff size={28} color="#f22911" />
               <Toast.Description>{error}</Toast.Description>
             </Toast.Root>

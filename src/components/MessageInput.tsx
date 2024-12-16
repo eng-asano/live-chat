@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect, memo } from 'react'
+import { useState, useCallback, memo } from 'react'
 import { createPortal } from 'react-dom'
 import { MdSend, MdHighlightOff } from 'react-icons/md'
 import * as Toast from '@radix-ui/react-toast'

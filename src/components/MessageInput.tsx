@@ -46,7 +46,6 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
 
   const closeToast = useCallback(async (open: boolean) => {
     if (open) return
-    await new Promise((r) => setTimeout(r, 2500))
     setOpenToast(false)
     await new Promise((r) => setTimeout(r, 1000))
     setError(undefined)
@@ -75,7 +74,7 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
               open={openToast}
               className={styles.toast.root}
               defaultOpen={false}
-              duration={1000}
+              duration={2000}
               onOpenChange={closeToast}
             >
               <MdHighlightOff size={28} className={styles.toast.icon} />

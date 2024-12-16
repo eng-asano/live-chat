@@ -40,12 +40,18 @@ export const messageTextRecipe = defineRecipe({
   className: 'messageText',
   description: 'message text style',
   base: {
+    display: 'flex',
+    alignItems: 'center',
     maxW: '590px',
-    p: '20px 28px',
+    p: '8px',
     fontSize: '1.2rem',
     lineHeight: '1.8rem',
     bgColor: 'message.member',
-    borderRadius: '24px',
+    borderRadius: '16px',
     whiteSpace: 'pre-wrap',
+
+    sm: {
+      p: '16px',
+    },
   },
 })

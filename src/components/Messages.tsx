@@ -178,10 +178,14 @@ const styles = {
     pl: '32px',
   }),
   userText: css({
+    minH: '48px',
     bgColor: 'message.user',
   }),
-  memberArea: flex({}),
-  memberText: css({
+  memberArea: flex({
+    minH: '48px',
+  }),
+  memberText: flex({
+    align: 'center',
     ml: '72px',
   }),
   date: css({

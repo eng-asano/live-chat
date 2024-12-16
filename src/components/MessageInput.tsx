@@ -22,6 +22,7 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
   const sendMessage = useCallback(() => {
     sendContent?.(input, 'text')
     setInput('')
+    setLineLength(1)
   }, [input, sendContent])
 
   const changeInput = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -34,17 +35,19 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
 
   if (!isClient) return <></>
 
+  const baseHeight = isSP ? 36 : 42
+
   return (
     <div className={styles.root}>
       <textarea
         className={styles.textarea}
-        style={{ height: isSP ? 36 + 14 * (lineLength - 1) : 42 + 14 * (lineLength - 1) }}
+        style={{ height: baseHeight + 14 * (lineLength - 1) }}
         value={input}
         onChange={changeInput}
         placeholder="Send a message"
       />
-      <button className={styles.btn}>
-        <MdSend className={styles.icon} size={24} onClick={sendMessage} />
+      <button className={styles.btn} disabled={input.trim() === ''}>
+        <MdSend size={24} onClick={sendMessage} />
       </button>
     </div>
   )
@@ -79,8 +82,15 @@ const styles = {
     sm: {
       p: '8px',
     },
-  }),
-  icon: css({
-    color: 'primary.main',
+
+    '& svg': {
+      color: 'primary.main',
+    },
+
+    _disabled: {
+      '& svg': {
+        color: 'gray.400',
+      },
+    },
   }),
 }

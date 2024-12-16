@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useCallback, useEffect, memo } from 'react'
-import { MdSend } from 'react-icons/md'
+import { createPortal } from 'react-dom'
+import { MdSend, MdHighlightOff } from 'react-icons/md'
+import * as Toast from '@radix-ui/react-toast'
 import { useLiveChat, useClient, useMedia } from '@/src/hooks'
 import { css } from '@/styled-system/css'
 import { flex } from '@/styled-system/patterns'
@@ -14,13 +16,22 @@ interface Props {
 export const MessageInput = memo(({ teamCode, userId }: Props) => {
   const [input, setInput] = useState('')
   const [lineLength, setLineLength] = useState(1)
+  const [openToast, setOpenToast] = useState(false)
+  const [error, setError] = useState<string>()
 
   const { isClient } = useClient()
   const { sendContent } = useLiveChat(teamCode, userId)
   const { isSP } = useMedia()
 
   const sendMessage = useCallback(() => {
-    sendContent?.(input, 'text')
+    const res = sendContent?.(input, 'text')
+
+    if (res?.error) {
+      setError(res.error)
+      setOpenToast(true)
+      return
+    }
+
     setInput('')
     setLineLength(1)
   }, [input, sendContent])
@@ -31,6 +42,14 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
 
     setInput(value)
     if (lines.length < 6) setLineLength(lines.length)
+  }, [])
+
+  const closeToast = useCallback(async (open: boolean) => {
+    if (open) return
+    await new Promise((r) => setTimeout(r, 2500))
+    setOpenToast(false)
+    await new Promise((r) => setTimeout(r, 1000))
+    setError(undefined)
   }, [])
 
   if (!isClient) return <></>
@@ -49,6 +68,23 @@ export const MessageInput = memo(({ teamCode, userId }: Props) => {
       <button className={styles.btn} disabled={input.trim() === ''}>
         <MdSend size={24} onClick={sendMessage} />
       </button>
+      {isClient &&
+        createPortal(
+          <Toast.Provider swipeDirection="right">
+            <Toast.Root
+              open={openToast}
+              className={styles.toast.root}
+              defaultOpen={false}
+              duration={1000}
+              onOpenChange={closeToast}
+            >
+              <MdHighlightOff size={28} className={styles.toast.icon} />
+              <Toast.Description>{error}</Toast.Description>
+            </Toast.Root>
+            <Toast.Viewport className={styles.toast.viewport} />
+          </Toast.Provider>,
+          document.body
+        )}
     </div>
   )
 })
@@ -93,4 +129,35 @@ const styles = {
       },
     },
   }),
+  toast: {
+    viewport: css({
+      position: 'fixed',
+      bottom: '20px',
+      right: '20px',
+      minW: '320px',
+      zIndex: '10',
+    }),
+    root: flex({
+      align: 'center',
+      columnGap: '8px',
+      h: '60px',
+      p: '8px',
+      fontWeight: 'bold',
+      bgColor: '#fff',
+      borderLeftWidth: '4px',
+      borderColor: 'error.main',
+      borderRadius: '4px',
+      boxShadow: '0px 10px 20px',
+      boxShadowColor: 'boxShadow.main',
+      '&[data-state="open"]': {
+        animation: 'toastIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+      '&[data-state="closed"]': {
+        animation: 'toastOut 0.5s ease-in',
+      },
+    }),
+    icon: css({
+      color: 'error.main',
+    }),
+  },
 }

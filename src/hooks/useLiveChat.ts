@@ -22,7 +22,7 @@ interface SocketData {
   activeUserIds: string[]
   messages: Message[]
   hasMoreMessage: boolean
-  sendContent: (content: string, type: string) => void
+  sendContent: (content: string, type: string) => { error: string } | void
   loadPrevMessages: () => Promise<void>
 }
 
@@ -46,6 +46,12 @@ export const useLiveChat = (teamCode: string, userId: string) => {
           content,
           content_type: type,
         }
+
+        const ready = client.readyState
+        if (ready === client.CLOSING || ready === client.CLOSED) {
+          return { error: '通信エラーが発生しました。ページを再読み込みしてください。' }
+        }
+
         client.send(JSON.stringify(body))
       }
 

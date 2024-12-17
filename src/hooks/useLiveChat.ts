@@ -118,7 +118,7 @@ export const useLiveChat = (teamCode: string, userId: string) => {
 
   return {
     activeUserIds: data?.activeUserIds ?? [],
-    messages: data?.messages ?? [],
+    messages: data?.messages,
     hasMoreMessage: data?.hasMoreMessage || false,
     sendContent: data?.sendContent,
     loadPrevMessages: data?.loadPrevMessages,

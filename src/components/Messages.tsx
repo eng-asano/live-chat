@@ -3,8 +3,9 @@
 import { memo, useCallback } from 'react'
 import Image from 'next/image'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import DotLoader from 'react-spinners/DotLoader'
 import moment from 'moment'
-import { useLiveChat, useThumbnail } from '@/src/hooks'
+import { useLiveChat, useThumbnail, useMedia } from '@/src/hooks'
 import { formatISO8601 } from '@/src/utils/data'
 import { Message } from '@/src/types'
 import { css } from '@/styled-system/css'
@@ -29,29 +30,35 @@ export const Messages = memo(({ teamCode, userId }: MessagesProps) => {
 
   return (
     <div id="message-scroll" className={styles.root}>
-      <InfiniteScroll
-        dataLength={messages.length}
-        next={nextMessages}
-        hasMore={hasMoreMessage}
-        inverse={true}
-        loader={undefined}
-        scrollableTarget="message-scroll"
-        className={styles.scroll}
-      >
-        <div className={styles.messages}>
-          {messages.map((m, i) => (
-            <Content
-              key={m.created_at}
-              userId={userId}
-              content={m.content}
-              createdAt={m.created_at}
-              memberId={m.user_id}
-              prevContent={messages?.[i - 1]}
-              thumbnails={thumbnails}
-            />
-          ))}
+      {!messages ? (
+        <div className={styles.loading}>
+          <DotLoader size={56} color="#0891b2" />
         </div>
-      </InfiniteScroll>
+      ) : (
+        <InfiniteScroll
+          dataLength={messages.length}
+          next={nextMessages}
+          hasMore={hasMoreMessage}
+          inverse={true}
+          loader={undefined}
+          scrollableTarget="message-scroll"
+          className={styles.scroll}
+        >
+          <div className={styles.messages}>
+            {messages.map((m, i) => (
+              <Content
+                key={m.created_at}
+                userId={userId}
+                content={m.content}
+                createdAt={m.created_at}
+                memberId={m.user_id}
+                prevContent={messages?.[i - 1]}
+                thumbnails={thumbnails}
+              />
+            ))}
+          </div>
+        </InfiniteScroll>
+      )}
     </div>
   )
 })
@@ -122,12 +129,16 @@ const MemberMessage = ({ text, createdAt }: MessageProps) => {
 }
 
 const ImageMessage = ({ text, createdAt, thumbnail }: { text: string; createdAt: string; thumbnail: string }) => {
+  const { isSP } = useMedia()
+
+  const size = isSP ? 30 : 48
+
   const time = moment(createdAt).format('HH:mm')
 
   return (
     <div className={styles.imgMessage}>
       <div className={styles.thumbnail}>
-        <Image src={thumbnail} width={48} height={48} alt="thumbnail" />
+        <Image src={thumbnail} width={size} height={size} alt="thumbnail" />
       </div>
       <p className={styles.memberArea}>
         <span className={messageText()}>{text}</span>
@@ -155,16 +166,21 @@ const styles = {
     flexDirection: 'column-reverse',
     position: 'relative',
     w: '100%',
-    maxW: '1280px',
+    maxW: '1200px',
     m: '0 auto',
   }),
   messages: flex({
     direction: 'column',
-    rowGap: '16px',
+    rowGap: '12px',
+    pt: '8px',
     color: 'font.dark',
+
+    sm: {
+      rowGap: '20px',
+    },
   }),
   imgMessage: flex({
-    columnGap: '24px',
+    columnGap: '12px',
   }),
   thumbnail: css({
     flexShrink: '0',
@@ -175,21 +191,35 @@ const styles = {
   userArea: flex({
     alignSelf: 'flex-end',
     columnGap: '4px',
-    pl: '32px',
+    ml: '42px',
+
+    sm: {
+      ml: '60px',
+    },
   }),
   userText: css({
-    minH: '48px',
+    minH: '32px',
     bgColor: 'message.user',
   }),
   memberArea: flex({
-    minH: '48px',
+    columnGap: '4px',
+    alignSelf: 'baseline',
+    minH: '32px',
+    mr: '42px',
+
+    sm: {
+      mr: '60px',
+    },
   }),
   memberText: flex({
     align: 'center',
-    ml: '72px',
+    ml: '42px',
+
+    sm: {
+      ml: '60px',
+    },
   }),
   date: css({
-    mb: '24px',
     '& span': {
       flexShrink: '0',
     },
@@ -198,7 +228,18 @@ const styles = {
     flexShrink: '0',
     alignSelf: 'flex-end',
     pb: '2px',
-    fontSize: '0.9rem',
+    fontSize: '0.8rem',
     color: 'gray.500',
+
+    sm: {
+      fontSize: '0.9rem',
+    },
+  }),
+  loading: flex({
+    direction: 'column',
+    justify: 'center',
+    align: 'center',
+    rowGap: '20px',
+    h: '100%',
   }),
 }

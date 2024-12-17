@@ -67,7 +67,7 @@ const styles = {
   }),
   item: flex({
     align: 'center',
-    h: '32px',
+    h: '48px',
     p: '0 12px',
     cursor: 'pointer',
     outline: 'none',
@@ -76,6 +76,11 @@ const styles = {
       '&[data-state="checked"]': {
         bgColor: 'selected.main',
       },
+    },
+    '&:not(last-child)': {
+      borderBottomWidth: '1px',
+      borderBottomStyle: 'solid',
+      borderBlockColor: 'gray.300',
     },
     '&[data-state="checked"]': {
       bgColor: 'selected.main',

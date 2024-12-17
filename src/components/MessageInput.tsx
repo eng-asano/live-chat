@@ -139,9 +139,11 @@ const styles = {
     root: flex({
       align: 'center',
       columnGap: '8px',
+      ml: '20px',
       h: '60px',
       p: '8px',
       fontWeight: 'bold',
+      lineHeight: '1.4rem',
       bgColor: '#fff',
       borderLeftWidth: '4px',
       borderColor: 'error.main',

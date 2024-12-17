@@ -43,15 +43,11 @@ export const messageTextRecipe = defineRecipe({
     display: 'flex',
     alignItems: 'center',
     maxW: '590px',
-    p: '8px',
+    p: '4px 8px',
     fontSize: '1.2rem',
     lineHeight: '1.8rem',
     bgColor: 'message.member',
-    borderRadius: '16px',
+    borderRadius: '12px',
     whiteSpace: 'pre-wrap',
-
-    sm: {
-      p: '16px',
-    },
   },
 })

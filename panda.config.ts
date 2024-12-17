@@ -3,7 +3,7 @@ import { loginUIBaseRecipe, separatorRecipe, messageTextRecipe } from './panda.r
 
 const globalCss = defineGlobalStyles({
   'html, body': {
-    fontSize: '14px',
+    fontSize: '12px',
     letterSpacing: '0.1rem',
     color: 'font.main',
     lineHeight: '1rem',
@@ -11,6 +11,10 @@ const globalCss = defineGlobalStyles({
     overflowWrap: 'break-word',
     wordBreak: 'break-all',
     overflow: 'hidden',
+
+    sm: {
+      fontSize: '13px',
+    },
   },
   html: {
     '--global-font-body': 'Roboto, sans-serif',
@@ -70,7 +74,7 @@ export default defineConfig({
           },
           message: {
             user: { value: '#0891b226' },
-            member: { value: '#0891b208' },
+            member: { value: '#0891b20A' },
           },
           font: {
             light: { value: '#999999' },

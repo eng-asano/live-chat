@@ -22,8 +22,21 @@
   - ユーザーが所属するすべてのチームを取得して表示
   - チームメンバーのログイン状態をリアルタイムで表示
 #### 3.3 メッセージ機能
-- 方式： WebSocket、SQS、DynamoDBを連携
+- 方式： WebSocket、Lambda、SQS、DynamoDBを連携
 - 機能：
   - チーム内でリアルタイムにメッセージを送受信
   - テキストメッセージをサポートし、将来的にはマルチメディア（例: 画像、ファイル）対応も検討
   - 接続切断時の自動再接続とメッセージ同期
+
+## 4. 技術仕様
+- Next.js（App Router）
+- SWR（WebSocket）
+- Jotai
+- Panda CSS
+- Radix UI
+- AWS（主要機能のみ抜粋）
+  - EC2
+  - Cognito
+  - Lambda
+  - DynamoDB
+  - SQS

@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 1. はじめに
+- システム名： Live Chat
+- 目的：組織単位でチームベースのリアルタイムチャットアプリケーションを開発する
 
-## Getting Started
+## 2. システム構成図
+![スクリーンショット 2024-12-19 23 45 21](https://github.com/user-attachments/assets/52246bc2-7ad5-4a1f-816a-031bd1ed111b)
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 3. 機能要件
+#### 3.1 認証
+- 方式： CognitoのJWTを利用した認証
+- 入力項目：
+  - チームコード
+  - ユーザーID
+  - パスワード
+- 機能：
+  - セキュアなログインプロセス
+  - トークンの有効期限とリフレッシュ機能によるセッションのセキュリティ維持
+  - パスワードの暗号化保存
+#### 3.2 チーム管理
+- 方式： Cognitoが保持するユーザー情報、DynamoDBによるログイン状態管理を連携
+- 機能：
+  - ユーザーが所属するすべてのチームを取得して表示
+  - チームメンバーのログイン状態をリアルタイムで表示
+#### 3.3 メッセージ機能
+- 方式： WebSocket、SQS、DynamoDBを連携
+- 機能：
+  - チーム内でリアルタイムにメッセージを送受信
+  - テキストメッセージをサポートし、将来的にはマルチメディア（例: 画像、ファイル）対応も検討
+  - 接続切断時の自動再接続とメッセージ同期

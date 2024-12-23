@@ -21,6 +21,7 @@
     "@strozw/use-action-state-compat": "0.1.10",
     "jose": "5.9.6",
     "jotai": "2.10.3",
+    "js-cookie": "3.0.5",
     "moment": "2.30.1",
     "next": "14.2.14",
     "react": "18.3.1",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@pandacss/dev": "0.46.1",
+    "@types/js-cookie": "3.0.5",
     "@types/node": "20.16.10",
     "@types/react": "18.3.11",
     "@types/react-dom": "18.3.0",

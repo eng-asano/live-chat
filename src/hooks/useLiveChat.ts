@@ -1,6 +1,7 @@
 'use client'
 
 import useSWRSubscription, { SWRSubscriptionOptions } from 'swr/subscription'
+import Cookies from 'js-cookie'
 import { Session, Message } from '@/src/types'
 
 type Data =
@@ -27,7 +28,9 @@ interface SocketData {
 }
 
 export const useLiveChat = (teamCode: string, userId: string) => {
-  const endpoint = `${process.env.NEXT_PUBLIC_LIVE_CHAT_WEBSOCKET}?team_code=${teamCode}&user_id=${userId}`
+  const idToken = Cookies.get('idToken')
+
+  const endpoint = `${process.env.NEXT_PUBLIC_LIVE_CHAT_WEBSOCKET}?team_code=${teamCode}&user_id=${userId}&id_token=${idToken}`
 
   const { data } = useSWRSubscription(endpoint, (key, { next }: SWRSubscriptionOptions<SocketData, Error>) => {
     const client = new WebSocket(key)

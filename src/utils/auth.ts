@@ -12,7 +12,7 @@ export const authConfig = {
 } as const
 
 export const cookieOption = {
-  httpOnly: true,
+  httpOnly: false,
   secure: false,
   sameSite: 'strict',
   maxAge: 60 * 60 * 24,

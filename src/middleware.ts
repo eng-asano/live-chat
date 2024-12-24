@@ -2,6 +2,17 @@ import { NextResponse, NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
+  const isAuth = basicAuth(request)
+
+  if (!isAuth) {
+    return new NextResponse('Unauthorized', {
+      status: 401,
+      headers: {
+        'WWW-Authenticate': 'Basic realm="Restricted Area"',
+      },
+    })
+  }
+
   const cookieStore = cookies()
   const idToken = cookieStore.get('idToken')?.value
   const accessToken = cookieStore.get('accessToken')?.value
@@ -26,4 +37,18 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: '/((?!api|_next/static|_next/image|images|favicon.ico).*)',
+}
+
+/** Basic認証 */
+function basicAuth(request: NextRequest) {
+  const userName = process.env.BASIC_AUTH_USER_NAME
+  const password = process.env.BASIC_AUTH_PASSWORD
+
+  if (!userName || !password) return true
+
+  const authHeader = request.headers.get('authorization')
+
+  const authStr = `Basic ${Buffer.from(`${userName}:${password}`).toString('base64')}`
+
+  return authHeader === authStr
 }

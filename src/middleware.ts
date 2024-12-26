@@ -14,9 +14,6 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl
 
-  const isAuth = basicAuth(request)
-  if (!isAuth) return unauthorized()
-
   if (url.pathname === '/') {
     const url = hasToken ? '/dashboard' : '/sign-in'
     return NextResponse.redirect(new URL(url, request.url))
@@ -37,20 +34,6 @@ export async function middleware(request: NextRequest) {
   // }
 
   return NextResponse.next()
-}
-
-/** Basic認証 */
-function basicAuth(request: NextRequest) {
-  const userName = process.env.BASIC_AUTH_USER_NAME
-  const password = process.env.BASIC_AUTH_PASSWORD
-
-  if (!userName || !password) return true
-
-  const authHeader = request.headers.get('authorization')
-
-  const authStr = `Basic ${Buffer.from(`${userName}:${password}`).toString('base64')}`
-
-  return authHeader === authStr
 }
 
 /** JWTの検証 */

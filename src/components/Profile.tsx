@@ -37,7 +37,11 @@ interface ThumbnailProps {
 }
 
 const Thumbnail = async ({ teamCode, userId }: ThumbnailProps) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${teamCode}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE_URL}/api/thumbnails/${teamCode}`, {
+    headers: {
+      'X-Source': 'server',
+    },
+  })
 
   const { data } = (await res.json()) as ThumbnailResponse
 

@@ -166,7 +166,7 @@ const styles = {
     flexDirection: 'column-reverse',
     position: 'relative',
     w: '100%',
-    maxW: '1200px',
+    maxW: '1280px',
     m: '0 auto',
   }),
   messages: flex({

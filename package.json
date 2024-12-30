@@ -11,7 +11,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@aws-amplify/auth": "5.6.15",
     "@aws-sdk/client-cognito-identity-provider": "3.699.0",
     "@aws-sdk/client-dynamodb": "3.699.0",
     "@aws-sdk/client-s3": "3.701.0",
@@ -19,6 +18,7 @@
     "@radix-ui/react-select": "2.1.2",
     "@radix-ui/react-toast": "1.2.2",
     "@strozw/use-action-state-compat": "0.1.10",
+    "aws-amplify": "5.3.27",
     "jose": "5.9.6",
     "jotai": "2.10.3",
     "js-cookie": "3.0.5",

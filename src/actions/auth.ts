@@ -1,13 +1,12 @@
 'use server'
 
-import Amplify, { Auth } from '@aws-amplify/auth'
+import { Auth } from 'aws-amplify'
 import { CognitoIdentityProviderClient, ListUsersCommand } from '@aws-sdk/client-cognito-identity-provider'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'
 import { authConfig, cookieOption } from '@/src/utils/auth'
 import { UserInfo } from '@/src/types/cognito'
 
-Amplify.configure(authConfig)
 Auth.configure(authConfig)
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.NEXT_AWS_REGION })

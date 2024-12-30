@@ -1,6 +1,6 @@
 'use server'
 
-import { Auth } from 'aws-amplify'
+import { Auth } from '@aws-amplify/auth'
 import { CognitoIdentityProviderClient, ListUsersCommand } from '@aws-sdk/client-cognito-identity-provider'
 import { cookies } from 'next/headers'
 import { jwtVerify, createRemoteJWKSet, decodeJwt } from 'jose'

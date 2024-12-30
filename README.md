@@ -3,6 +3,9 @@
 - 目的：組織単位でチームベースのリアルタイムチャットアプリケーションを開発する
 - 開発環境：https://livechat.yukiasano-dev.com/
 
+#### デモ
+https://github.com/user-attachments/assets/c8b83551-cc63-4cbe-9cce-0320029661d7
+
 ## 2. システム構成図
 ![スクリーンショット 2024-12-19 23 45 21](https://github.com/user-attachments/assets/52246bc2-7ad5-4a1f-816a-031bd1ed111b)
 

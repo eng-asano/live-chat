@@ -1,0 +1,27 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "warn",
+    // 関数とカッコはあけない(function hoge() {/** */})
+    "func-call-spacing": ["warn", "never"],
+    // true/falseを無駄に使うな
+    "no-unneeded-ternary": "warn",
+    // varは禁止
+    "no-var": "error",
+    // かっこの中はスペースなし
+    "space-in-parens": ["warn", "never"],
+    // コンソールは許可
+    "no-console": "off",
+    // カンマの前後にスペース入れる
+    "comma-spacing": "warn",
+    // 配列のindexに空白を入れない
+    "computed-property-spacing": "warn",
+    // キーの空白
+    "key-spacing": "warn",
+    // キーワードの前後には適切なスペースを入れる
+    "keyword-spacing": "warn",
+    // 引数'_'は許容
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+  }
+}

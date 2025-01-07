@@ -1,7 +1,6 @@
 ## 1. はじめに
 - システム名： Live Chat
 - 目的：組織単位でチームベースのリアルタイムチャットアプリケーションを開発する
-- 開発環境：https://livechat.yukiasano-dev.com/
 
 #### デモ
 https://github.com/user-attachments/assets/c8b83551-cc63-4cbe-9cce-0320029661d7
